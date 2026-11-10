@@ -55,7 +55,7 @@ export default function Header() {
             priority
             className="phoenix-logo"
           />
-          <span>Dot Phoenix Solutions</span>
+          <span>Dot Phoenix</span>
         </Link>
 
         <nav className="nav-desktop">
