@@ -28,14 +28,15 @@
 }
 
 .careers-header h1 {
-  font-size: clamp(2rem, 1.8rem + 1.5vw, 3.25rem);
+  font-size: clamp(2.15rem, 1.85rem + 1.4vw, 3rem);
   line-height: 1.15;
   color: var(--text-primary);
+  letter-spacing: -0.025em;
 }
 
 .careers-header p {
   margin-top: 0.75rem;
-  font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+  font-size: clamp(0.975rem, 0.94rem + 0.15vw, 1.0625rem);
   line-height: 1.7;
   color: var(--text-muted);
 }
@@ -67,9 +68,11 @@
 }
 
 .career-role h2 {
-  font-size: 1.4rem;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: var(--text-primary);
   position: relative;
+  letter-spacing: -0.015em;
 }
 
 .career-role h2::after {
@@ -84,28 +87,31 @@
 
 .role-desc {
   margin-top: 0.75rem;
-  line-height: 1.75;
+  line-height: 1.7;
+  font-size: 0.9375rem;
   max-width: 64rem;
 }
 
 .career-role h3 {
   margin-top: 1.3rem;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
+  font-weight: 600;
   color: #e5e7eb;
 }
 
 .career-role ul {
   margin-top: 0.5rem;
   padding-left: 1.1rem;
+  font-size: 0.875rem;
 }
 
 .career-role li {
   line-height: 1.6;
 }
 
-.career-role li::marker {
+/* .career-role li::marker {
   color: var(--accent);
-}
+} */
 
 .skills {
   display: flex;

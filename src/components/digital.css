@@ -4,11 +4,11 @@
 }
 
 .digital-marketing-title {
-  font-size: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
+  font-size: clamp(1.625rem, 1.35rem + 1vw, 2.35rem);
   font-weight: 600;
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
   color: #ffffff;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.025em;
 }
 
 .digital-marketing-grid {
@@ -47,21 +47,22 @@
   flex-shrink: 0;
   align-self: flex-start;
   margin-top: 0.125rem;
-  /* color: #ff8c28; */
+ /* color: #ff8c28; */
 }
 
 .digital-marketing-card h3 {
-  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  font-size: clamp(1.05rem, 1rem + 0.2vw, 1.1875rem);
   font-weight: 600;
   margin: 0;
   line-height: 1.35;
   color: #ffffff;
+  letter-spacing: -0.015em;
 }
 
 .digital-marketing-card p {
   margin: 0;
   padding-top: 0.25rem;
-  font-size: clamp(0.9rem, 0.88rem + 0.15vw, 0.975rem);
+  font-size: clamp(0.875rem, 0.85rem + 0.15vw, 0.9375rem);
   line-height: 1.65;
   color: #9aa0a6;
   flex-grow: 1;

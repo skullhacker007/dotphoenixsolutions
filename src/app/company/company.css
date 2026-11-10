@@ -5,13 +5,14 @@
   --space-4: 2rem;
   --space-5: 3rem;
 
-  --radius-md: 1rem;
-  --radius-lg: 1.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
 
   --bg: #0e0f12;
   --border: #1f2228;
   --text: #ffffff;
   --muted: #9aa0a6;
+  --accent: #ff8c28;
 
   --content-max: 94rem;
 }
@@ -34,16 +35,18 @@
 }
 
 .section-subtitle {
-  color: var(--muted);
+  color: #9aa0a6;
   max-width: 44rem;
-  margin: var(--space-2) auto var(--space-4);
-  font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+  margin: 0.75rem auto 2.75rem;
+  font-size: clamp(0.95rem, 0.92rem + 0.18vw, 1.0625rem);
   line-height: 1.65;
+  font-weight: 400;
+  letter-spacing: -0.01em;
 }
 
 .company-intro {
   padding-top: 2rem;
-  padding-bottom: calc(var(--space-5) * 2);
+  padding-bottom: calc(var(--space-5) * 1.5);
 }
 
 .company-intro-grid {
@@ -55,126 +58,245 @@
 }
 
 .company-intro-text h2 {
-  font-size: clamp(2.25rem, 2rem + 1.8vw, 3.5rem);
+  font-size: clamp(2.15rem, 1.85rem + 1.5vw, 3.25rem);
   margin-bottom: var(--space-3);
-  line-height: 1.15;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+  font-weight: 600;
 }
 
 .company-intro-text p {
-  color: var(--muted);
+  color: #9aa0a6;
   line-height: 1.7;
   max-width: 40rem;
-  font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+  font-size: clamp(0.975rem, 0.94rem + 0.15vw, 1.0625rem);
 }
 
 .vmv-section {
-  padding: var(--space-5) 0;
+  padding: clamp(3rem, 5vw, 4.5rem) 0;
 }
 
 .vmv-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(18.5rem, 1fr));
+  gap: clamp(1.25rem, 1.6vw, 1.875rem);
 }
 
 .vmv-card {
   border: 0.0625rem solid var(--border);
   border-radius: var(--radius-lg);
-  padding: var(--space-4);
+  padding: clamp(1.625rem, 2vw, 2.125rem);
   background: rgba(255, 255, 255, 0.02);
   display: flex;
   flex-direction: column;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.vmv-card:hover {
+  transform: translateY(-0.25rem);
+  border-color: rgba(255, 140, 40, 0.35);
+  box-shadow: 0 0.875rem 2.25rem rgba(0, 0, 0, 0.55);
 }
 
 .vmv-icon {
-  width: 1.6em;
-  height: 1.6em;
-  /* color: #ff8c28; */
-  margin-bottom: var(--space-2);
+  width: 1.5rem;
+  height: 1.5rem;
+  /* color: var(--accent); */
+  margin-bottom: 1.125rem;
+  flex-shrink: 0;
+}
+
+.vmv-card h3 {
+  font-size: clamp(1.15rem, 1.08rem + 0.25vw, 1.3rem);
+  font-weight: 600;
+  line-height: 1.35;
+  color: #ffffff;
+  margin: 0 0 0.75rem;
+  letter-spacing: -0.015em;
+}
+
+.vmv-card p {
+  color: #9aa0a6;
+  font-size: clamp(0.875rem, 0.85rem + 0.15vw, 0.9375rem);
+  line-height: 1.65;
+  margin: 0;
+  flex-grow: 1;
 }
 
 .company-offer {
-  padding: var(--space-5) 0;
+  padding: clamp(3rem, 5vw, 4.5rem) 0;
 }
 
 .offer-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
-  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(18.5rem, 1fr));
+  gap: clamp(1.25rem, 1.6vw, 1.875rem);
 }
 
 .offer-card {
   border: 0.0625rem solid var(--border);
   border-radius: var(--radius-lg);
-  padding: var(--space-3);
+  padding: clamp(1.625rem, 2vw, 2.125rem);
   background: rgba(255, 255, 255, 0.02);
   display: flex;
   flex-direction: column;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.offer-card:hover {
+  transform: translateY(-0.25rem);
+  border-color: rgba(255, 140, 40, 0.35);
+  box-shadow: 0 0.875rem 2.25rem rgba(0, 0, 0, 0.55);
 }
 
 .offer-icon {
-  width: 1.6em;
-  height: 1.6em;
-  /* color: #ff8c28; */
-  margin-bottom: var(--space-2);
+  width: 1.5rem;
+  height: 1.5rem;
+  /* color: var(--accent); */
+  margin-bottom: 1.125rem;
+  flex-shrink: 0;
+}
+
+.offer-card h3 {
+  font-size: clamp(1.15rem, 1.08rem + 0.25vw, 1.3rem);
+  font-weight: 600;
+  line-height: 1.35;
+  color: #ffffff;
+  margin: 0 0 0.75rem;
+  letter-spacing: -0.015em;
+}
+
+.offer-card p {
+  color: #9aa0a6;
+  font-size: clamp(0.875rem, 0.85rem + 0.15vw, 0.9375rem);
+  line-height: 1.65;
+  margin: 0;
+  flex-grow: 1;
 }
 
 .company-reviews {
-  padding: var(--space-5) 0;
+  padding: clamp(3rem, 5vw, 4.5rem) 0;
 }
 
 .reviews-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(18.5rem, 1fr));
+  gap: clamp(1.25rem, 1.6vw, 1.875rem);
 }
 
 .review-card {
   border: 0.0625rem solid var(--border);
   border-radius: var(--radius-lg);
-  padding: var(--space-4);
+  padding: clamp(1.625rem, 2vw, 2.125rem);
   background: rgba(255, 255, 255, 0.02);
   display: flex;
   flex-direction: column;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.review-card:hover {
+  transform: translateY(-0.25rem);
+  border-color: rgba(255, 140, 40, 0.35);
+  box-shadow: 0 0.875rem 2.25rem rgba(0, 0, 0, 0.55);
+}
+
+.review-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  /* color: var(--accent); */
+  opacity: 0.9;
+  margin-bottom: 1.125rem;
 }
 
 .review-text {
-  color: var(--muted);
-  font-style: italic;
-  line-height: 1.65;
+  color: #cbd5e1;
+  font-size: clamp(0.925rem, 0.9rem + 0.15vw, 0.975rem);
+  line-height: 1.7;
+  font-style: normal;
+  margin: 0 0 1.5rem;
+  flex-grow: 1;
+}
+
+.review-author {
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding-top: 1rem;
+  border-top: 0.0625rem solid rgba(255, 255, 255, 0.07);
+}
+
+.author-name {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.author-separator {
+  /* color: var(--accent); */
+  font-weight: 600;
+}
+
+.author-industry {
+  color: #94a3b8;
+  font-weight: 400;
 }
 
 .company-benefits {
-  padding: var(--space-5) 0;
+  padding: clamp(3rem, 5vw, 4.5rem) 0;
 }
 
 .benefits-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
-  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: clamp(1rem, 1.25vw, 1.5rem);
 }
 
 .benefit-card {
   border: 0.0625rem solid var(--border);
   border-radius: var(--radius-md);
-  padding: var(--space-4);
+  padding: clamp(1.25rem, 1.5vw, 1.625rem);
   background: rgba(255, 255, 255, 0.02);
   display: flex;
   flex-direction: column;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
 }
 
-.benefit-card p,
-.offer-card p,
-.vmv-card p {
-  color: var(--muted);
-  line-height: 1.65;
+.benefit-card:hover {
+  transform: translateY(-0.1875rem);
+  border-color: rgba(255, 140, 40, 0.3);
 }
 
 .benefit-icon {
-  width: 1.4em;
-  height: 1.4em;
-  /* color: #ff8c28; */
-  margin-bottom: var(--space-2);
+  width: 1.35rem;
+  height: 1.35rem;
+  /* color: var(--accent); */
+  margin-bottom: 0.875rem;
+}
+
+.benefit-card h4 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 0.45rem;
+  letter-spacing: -0.01em;
+}
+
+.benefit-card p {
+  color: #9aa0a6;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin: 0;
 }
 
 .company-intro-image {
@@ -185,18 +307,19 @@
 }
 
 .phoenix-title {
-  margin: 0.5rem;
-  font-size: 1.5rem;
+  margin: 0.5rem 0 0.25rem;
+  font-size: 1.35rem;
   font-weight: 600;
   color: #ffffff;
+  letter-spacing: -0.015em;
 }
 
 .phoenix-tagline {
   margin: 0;
   max-width: 17.5rem;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   line-height: 1.5;
-  color: #a8b0c4;
+  color: #9aa0a6;
 }
 
 .phoenix-image {

@@ -267,9 +267,11 @@ function Review({ quote, author, industry }: ReviewProps) {
     <div className="review-card">
       <Quote className="review-icon" />
       <p className="review-text">“{quote}”</p>
-      <span className="review-author">
-        {author} · {industry}
-      </span>
+      <div className="review-author">
+        <span className="author-name">{author}</span>
+        <span className="author-separator">·</span>
+        <span className="author-industry">{industry}</span>
+      </div>
     </div>
   );
 }

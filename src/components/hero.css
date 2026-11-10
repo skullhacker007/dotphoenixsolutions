@@ -24,12 +24,12 @@
 }
 
 .hero-title {
-  font-weight: 500;
-  line-height: 1.12;
+  font-weight: 600;
+  line-height: 1.14;
   color: #ffffff;
   margin-bottom: var(--space-2);
-  font-size: clamp(2.5rem, 2rem + 2.5vw, 4.5rem);
-  letter-spacing: -0.025em;
+  font-size: clamp(2.25rem, 1.85rem + 2vw, 3.85rem);
+  letter-spacing: -0.03em;
 }
 
 .hero-accent {
@@ -39,7 +39,7 @@
 .hero-description {
   max-width: 40rem;
   color: #9aa0a6;
-  font-size: clamp(1.05rem, 1rem + 0.35vw, 1.25rem);
+  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.15rem);
   line-height: 1.65;
   margin-bottom: var(--space-3);
 }

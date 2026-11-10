@@ -12,15 +12,15 @@
 }
 
 .services-header h1 {
-  font-size: clamp(2.5rem, 2.2rem + 1.8vw, 3.75rem);
+  font-size: clamp(2.25rem, 1.85rem + 1.5vw, 3.25rem);
   color: #ffffff;
   margin-bottom: 1.25rem;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 
 .services-header p {
-  font-size: clamp(1.05rem, 1rem + 0.25vw, 1.2rem);
-  line-height: 1.8;
+  font-size: clamp(0.975rem, 0.94rem + 0.18vw, 1.075rem);
+  line-height: 1.75;
   color: #94a3b8;
 }
 
@@ -51,23 +51,24 @@
 }
 
 .service-content h2 {
-  font-size: clamp(2rem, 1.7rem + 1.2vw, 2.75rem);
+  font-size: clamp(1.75rem, 1.5rem + 1vw, 2.35rem);
   color: #ffffff;
   margin-bottom: 1rem;
-  line-height: 1.2;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
 }
 
 .service-intro {
-  font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
-  line-height: 1.8;
+  font-size: clamp(0.95rem, 0.92rem + 0.15vw, 1.05rem);
+  line-height: 1.75;
   color: #e2e8f0;
   max-width: 48rem;
   margin-bottom: 1.2rem;
 }
 
 .service-description {
-  font-size: clamp(0.95rem, 0.9rem + 0.15vw, 1.05rem);
-  line-height: 1.75;
+  font-size: clamp(0.875rem, 0.85rem + 0.12vw, 0.9375rem);
+  line-height: 1.7;
   color: #94a3b8;
   max-width: 48rem;
   margin-bottom: 2.2rem;
@@ -78,7 +79,7 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 1rem;
-  color: #ff8c28;
+   /* color: #ff8c28; */
 }
 
 .service-list {
@@ -86,8 +87,8 @@
 }
 
 .service-list li {
-  font-size: 0.95rem;
-  color: #cbd5f5;
+  font-size: 0.875rem;
+  /* color: #cbd5f5; */
   margin-bottom: 0.65rem;
   line-height: 1.65;
 }
