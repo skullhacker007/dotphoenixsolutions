@@ -48,14 +48,14 @@ export async function sendContactEmail(data: ContactEmailPayload) {
           ${row("Source", data.source)}
         </table>
 
-        <div style="margin-top:16px">
+        <div style="margin-top:1rem">
           <strong>Message</strong>
           <p style="white-space:pre-line">
             ${escapeHtml(data.message || "No message provided")}
           </p>
         </div>
 
-        <hr style="margin:24px 0" />
+        <hr style="margin:1.5rem 0" />
 
         <small style="color:#666">
           Sent from dotphoenixsolutions.com

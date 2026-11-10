@@ -7,26 +7,21 @@
 }
 
 .terms-wrapper {
-  max-width: 57.5rem;
+  max-width: min(88rem, 100%);
   margin-inline: auto;
-  padding: 3rem 1.25rem;
+  padding: clamp(2rem, 3.5vw, 4rem) clamp(1.25rem, 3.5vw, 3.5rem);
   line-height: 1.65;
   color: var(--terms-text);
-  font-family:
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Roboto,
-    Arial,
-    sans-serif;
+  font-family: inherit;
+  width: 100%;
 }
 
 .skip-link {
   position: absolute;
   inset-inline-start: -100%;
   inset-block-start: auto;
-  width: 1px;
-  height: 1px;
+  width: 0.0625rem;
+  height: 0.0625rem;
   overflow: hidden;
 }
 

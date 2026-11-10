@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import "./services.css";
 import { ReactNode } from "react";
 
@@ -9,10 +10,19 @@ import PayrollVisual from "../service-visuals/PayrollVisual";
 import AiVisual from "../service-visuals/AiVisual";
 import WhyChoose from "@/components/WhyChoose";
 
-export const metadata = {
-  title: "Services — Dot Phoenix Solutions",
+export const metadata: Metadata = {
+  title: "Enterprise Digital Services | Dot Phoenix Solutions",
   description:
-    "Enterprise digital services including Web, Mobile, SaaS, AI Automation, Digital Marketing, and Payroll & Enterprise Systems.",
+    "Comprehensive enterprise digital services: Web Application Development, Mobile Engineering, SaaS Products, AI Automation, Digital Marketing, and Payroll Systems.",
+  alternates: {
+    canonical: "/services",
+  },
+  openGraph: {
+    title: "Enterprise Digital Services | Dot Phoenix Solutions",
+    description:
+      "Enterprise digital services including Web, Mobile, SaaS, AI Automation, Digital Marketing, and Payroll & Enterprise Systems.",
+    url: "/services",
+  },
 };
 
 type ServiceBlockProps = {

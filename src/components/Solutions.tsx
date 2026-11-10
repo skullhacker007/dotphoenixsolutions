@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { Card, Container, Text } from "./ui";
 import "./solutions.css";

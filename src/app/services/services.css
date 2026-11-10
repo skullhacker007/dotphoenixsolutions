@@ -5,20 +5,21 @@
 }
 
 .services-header {
-  max-width: 60rem;
-  margin: 0 auto 5rem;
-  padding: 0 1.5rem;
+  max-width: 68rem;
+  margin: 0 auto clamp(3rem, 5vw, 5rem);
+  padding: 0 clamp(1.25rem, 3.5vw, 3.5rem);
   text-align: center;
 }
 
 .services-header h1 {
-  font-size: clamp(2.6rem, 4vw, 3.2rem);
+  font-size: clamp(2.5rem, 2.2rem + 1.8vw, 3.75rem);
   color: #ffffff;
   margin-bottom: 1.25rem;
+  letter-spacing: -0.02em;
 }
 
 .services-header p {
-  font-size: 1.05rem;
+  font-size: clamp(1.05rem, 1rem + 0.25vw, 1.2rem);
   line-height: 1.8;
   color: #94a3b8;
 }
@@ -32,49 +33,52 @@
   min-height: 100vh;
   display: flex;
   align-items: center;
+  padding: clamp(3rem, 5vw, 5rem) 0;
 }
 
 .service-inner {
   width: 100%;
-  max-width: 75rem; /* 1200px */
+  max-width: min(var(--content-max, 94rem), 100%);
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 clamp(1.25rem, 3.5vw, 3.5rem);
 }
 
 .service-split {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 5rem;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: clamp(2.5rem, 4vw, 5.5rem);
   align-items: center;
 }
 
 .service-content h2 {
-  font-size: clamp(1.9rem, 3vw, 2.3rem);
+  font-size: clamp(2rem, 1.7rem + 1.2vw, 2.75rem);
   color: #ffffff;
   margin-bottom: 1rem;
+  line-height: 1.2;
 }
 
 .service-intro {
-  font-size: 1rem;
+  font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
   line-height: 1.8;
   color: #e2e8f0;
-  max-width: 42.5rem; /* 680px */
+  max-width: 48rem;
   margin-bottom: 1.2rem;
 }
 
 .service-description {
-  font-size: 0.95rem;
+  font-size: clamp(0.95rem, 0.9rem + 0.15vw, 1.05rem);
   line-height: 1.75;
   color: #94a3b8;
-  max-width: 42.5rem; /* 680px */
+  max-width: 48rem;
   margin-bottom: 2.2rem;
 }
 
 .service-content h3 {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+  font-size: 0.8125rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 1rem;
+  color: #ff8c28;
 }
 
 .service-list {
@@ -82,31 +86,35 @@
 }
 
 .service-list li {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: #cbd5f5;
   margin-bottom: 0.65rem;
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 .service-visual {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
 }
 
 @media (max-width: 56.25rem) {
-  /* 900px */
   .service-section {
     min-height: auto;
-    padding: 4rem 0;
+    padding: 3rem 0;
   }
 
   .service-split {
     grid-template-columns: 1fr;
-    gap: 3.5rem;
+    gap: 3rem;
   }
 
-  .services-header {
-    text-align: left;
+  .service-content {
+    order: 1;
+  }
+
+  .service-visual {
+    order: 2;
   }
 }

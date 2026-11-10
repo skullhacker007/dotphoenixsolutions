@@ -15,8 +15,9 @@
 
 .solutionspage-layout {
   display: grid;
-  grid-template-columns: 5rem 1fr;
+  grid-template-columns: 5rem minmax(0, 1fr);
   align-items: start;
+  width: 100%;
 }
 
 .solutionspage-rail {
@@ -73,8 +74,9 @@
 }
 
 .solution-content {
-  max-width: 57.5rem;
-  padding: 0 1.5rem;
+  max-width: 72rem;
+  padding: 0 clamp(1.25rem, 3.5vw, 3.5rem);
+  width: 100%;
 }
 
 .solution-tag {
@@ -147,10 +149,10 @@
 }
 
 .solutionspage-header {
-  max-width: 56.25rem;
+  max-width: 68rem;
   margin: 0 auto;
   text-align: center;
-  padding: 0 1.25rem;
+  padding: 0 clamp(1.25rem, 3.5vw, 3.5rem);
 }
 
 .solutionspage-header h1 {

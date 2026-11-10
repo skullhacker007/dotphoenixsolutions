@@ -1,25 +1,28 @@
 .process-section {
   padding-block: var(--space-5);
+  width: 100%;
 }
 
 .process-inner {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(2rem, 1.8rem + 0.8vw, 3rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  gap: clamp(2rem, 3.5vw, 4.5rem);
   align-items: center;
+  width: 100%;
 }
 
 .process-heading {
-  font-size: clamp(1.9rem, 1.6rem + 1vw, 2.2rem);
-  font-weight: 700;
-  line-height: 1.25;
+  font-size: clamp(2rem, 1.7rem + 1.2vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.2;
   margin-bottom: 1.25rem;
 }
 
 .process-description {
-  font-size: 1rem;
+  font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+  line-height: 1.65;
   color: #a0a5b0;
-  max-width: 32rem;
+  max-width: 36rem;
   margin-bottom: 1.75rem;
 }
 
@@ -33,7 +36,7 @@
   position: relative;
   padding-left: 1.5rem;
   margin-bottom: 0.75rem;
-  font-size: 0.95rem;
+  font-size: clamp(0.925rem, 0.9rem + 0.1vw, 1rem);
   color: #cfd3dc;
 }
 
@@ -44,26 +47,28 @@
   top: 0.55rem;
   width: 0.45rem;
   height: 0.45rem;
-  background: #8fa8ff;
+  background: #ff8c28;
   border-radius: 50%;
 }
 
 .process-visual {
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 
 .dashboard-mock {
   width: 100%;
-  max-width: 40rem;
-  height: 22rem;
+  max-width: 52rem;
+  min-height: 23rem;
   background: #0f1218;
-  border-radius: 1rem;
+  border-radius: var(--radius-lg);
   display: grid;
-  grid-template-columns: 160px 1fr;
+  grid-template-columns: 10rem 1fr;
   box-shadow:
-    0 24px 48px rgba(0, 0, 0, 0.45),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    0 1.5rem 3rem rgba(0, 0, 0, 0.45),
+    inset 0 0 0 0.0625rem rgba(255, 255, 255, 0.06);
+  border: 0.0625rem solid var(--border);
   overflow: hidden;
 }
 
@@ -73,13 +78,15 @@
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+  border-right: 0.0625rem solid rgba(255, 255, 255, 0.05);
 }
 
 .sidebar-logo {
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: #ffffff;
   padding: 0 0.5rem;
+  font-family: var(--font-space-grotesk), sans-serif;
 }
 
 .sidebar-nav {
@@ -92,19 +99,23 @@
   font-size: 0.75rem;
   color: #9aa0a6;
   padding: 0.45rem 0.6rem;
-  border-radius: 0.4rem;
+  border-radius: var(--radius-sm);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .sidebar-item.active {
-  background: rgba(120, 160, 255, 0.15);
-  color: #ffffff;
+  background: rgba(255, 140, 40, 0.15);
+  color: #ff8c28;
+  font-weight: 500;
 }
 
 .dashboard-main {
-  padding: 1rem;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
+  gap: 1rem;
 }
 
 .dashboard-top {
@@ -114,8 +125,9 @@
 }
 
 .dashboard-title {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: #cfd3dc;
+  font-weight: 500;
 }
 
 .dashboard-cards {
@@ -125,22 +137,26 @@
 }
 
 .dashboard-metric {
-  padding: 0.6rem;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 0.55rem;
+  padding: 0.625rem 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-sm);
+  border: 0.0625rem solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .metric-label {
   font-size: 0.65rem;
   color: #9aa0a6;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .metric-value {
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 600;
   color: #ffffff;
-  padding-left: 0.2rem;
 }
 
 .metric-value.positive {
@@ -149,13 +165,14 @@
 
 .dashboard-chart-real {
   height: 14rem;
+  width: 100%;
   padding: 0.25rem;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 56.25rem) {
   .process-inner {
     grid-template-columns: 1fr;
-    gap: var(--space-5);
+    gap: var(--space-4);
   }
 
   .dashboard-sidebar {
@@ -167,19 +184,25 @@
     max-width: 100%;
     width: 100%;
     margin-inline: auto;
-    box-sizing: border-box;
     overflow-x: hidden;
   }
 
   .dashboard-cards {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 0.5rem;
   }
 
   .dashboard-main {
-    padding: 0.75rem;
+    padding: 0.875rem;
   }
+
   .dashboard-chart-real {
-    height: 10rem;
+    height: 11rem;
+  }
+}
+
+@media (max-width: 32rem) {
+  .dashboard-cards {
+    grid-template-columns: 1fr;
   }
 }

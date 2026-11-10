@@ -1,4 +1,20 @@
+import type { Metadata } from "next";
 import "./docs.css";
+
+export const metadata: Metadata = {
+  title: "Documentation & Architecture | Dot Phoenix Solutions",
+  description:
+    "Explore Dot Phoenix Solutions technical documentation, core architecture, platform capabilities, services, and operational dashboards.",
+  alternates: {
+    canonical: "/resources/documentation",
+  },
+  openGraph: {
+    title: "Documentation & Architecture | Dot Phoenix Solutions",
+    description:
+      "Explore Dot Phoenix Solutions technical documentation, core architecture, platform capabilities, services, and operational dashboards.",
+    url: "/resources/documentation",
+  },
+};
 
 export default function DocumentationPage() {
   return (

@@ -1,9 +1,19 @@
+import type { Metadata } from "next";
 import "./policy.css";
 
-export const metadata = {
-  title: "Privacy Policy — Dot Phoenix Solutions",
+export const metadata: Metadata = {
+  title: "Privacy Policy | Dot Phoenix Solutions",
   description:
     "Privacy Policy for Dot Phoenix Solutions explaining how personal data is collected, used, shared, and protected.",
+  alternates: {
+    canonical: "/resources/privacy-policy",
+  },
+  openGraph: {
+    title: "Privacy Policy | Dot Phoenix Solutions",
+    description:
+      "Privacy Policy for Dot Phoenix Solutions explaining how personal data is collected, used, shared, and protected.",
+    url: "/resources/privacy-policy",
+  },
 };
 
 export default function PrivacyPolicyPage() {

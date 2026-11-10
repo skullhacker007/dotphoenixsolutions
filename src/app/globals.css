@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-
 :root {
   --space-1: clamp(0.5rem, 0.45rem + 0.2vw, 0.75rem);
   --space-2: clamp(1rem, 0.9rem + 0.35vw, 1.25rem);
@@ -7,19 +5,24 @@
   --space-4: clamp(2rem, 1.75rem + 0.85vw, 2.75rem);
   --space-5: clamp(3rem, 2.6rem + 1.2vw, 4rem);
 
-  --radius-sm: 0.75rem;
-  --radius-md: 1rem;
-  --radius-lg: 1.5rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.125rem;
+  --radius-xl: 1.5rem;
 
   --bg: #0e0f12;
   --surface: #12141a;
+  --surface-elevated: #161821;
   --border: #1f2228;
+  --border-subtle: rgba(255, 255, 255, 0.08);
 
   --text: #e9ebef;
   --muted: #c3c8d1;
+  --accent: #ff8c28;
 
-  --header-h: clamp(3.5rem, 4vw, 4.25rem);
-  --content-max: 75rem;
+  --header-h: clamp(3.75rem, 4.5vw, 4.5rem);
+  --content-max: 94rem;
+  --content-wide: 104rem;
 }
 
 *,
@@ -33,6 +36,8 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   overflow-y: scroll;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 html.lenis {
@@ -49,20 +54,23 @@ html.lenis {
 
 body {
   margin: 0;
+  width: 100%;
   min-height: 100dvh;
   background: var(--bg);
   color: var(--text);
   font-family:
-    Inter,
+    var(--font-inter),
     system-ui,
     -apple-system,
-    Segoe UI,
+    BlinkMacSystemFont,
+    "Segoe UI",
     Roboto,
     Arial,
     sans-serif;
   font-size: clamp(0.9375rem, 0.95rem + 0.15vw, 1.0625rem);
   line-height: 1.6;
-  overscroll-behavior: none;
+  overscroll-behavior-y: none;
+  overflow-x: hidden;
   scroll-padding-top: var(--header-h);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -79,44 +87,56 @@ canvas {
 
 main {
   display: block;
+  width: 100%;
 }
 
 section {
-  padding-block: var(--space-2);
+  padding-block: var(--space-4);
+  width: 100%;
+  position: relative;
 }
 
 .section-inner {
   width: 100%;
   max-width: min(var(--content-max), 100%);
   margin-inline: auto;
-  padding-inline: var(--space-2);
+  padding-inline: clamp(1.25rem, 3.5vw, 3.5rem);
 }
 
 .prose {
   max-width: 68ch;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 var(--space-2);
+  font-family:
+    var(--font-space-grotesk),
+    var(--font-inter),
+    system-ui,
+    sans-serif;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
 h1 {
-  font-size: clamp(2rem, 1.65rem + 1.3vw, 3rem);
+  font-size: clamp(2.25rem, 1.8rem + 1.8vw, 3.75rem);
   line-height: 1.15;
 }
 
 h2 {
-  font-size: clamp(1.6rem, 1.35rem + 0.9vw, 2.25rem);
+  font-size: clamp(1.75rem, 1.45rem + 1.2vw, 2.75rem);
   line-height: 1.2;
 }
 
 h3 {
-  font-size: clamp(1.25rem, 1.1rem + 0.45vw, 1.6rem);
+  font-size: clamp(1.3rem, 1.15rem + 0.6vw, 1.85rem);
   line-height: 1.3;
-}
-
-h1,
-h2,
-h3 {
-  margin: 0 0 var(--space-2);
-  font-weight: 600;
-  color: var(--text);
 }
 
 p {
@@ -151,12 +171,14 @@ button {
   background: none;
   border: none;
   cursor: pointer;
+  font-family: inherit;
 }
 
 :focus-visible {
-  outline: 0.125rem solid rgba(255, 255, 255, 0.35);
+  outline: 0.125rem solid rgba(255, 255, 255, 0.45);
   outline-offset: 0.125rem;
 }
+
 svg {
   width: 1em;
   height: 1em;
@@ -178,15 +200,15 @@ svg [stroke] {
   stroke-width: 1.5;
 }
 
+/* Subtle background illumination across full display */
 body::after {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-
   background: radial-gradient(
-    1200px circle at 50% -25%,
+    75rem circle at 50% -25%,
     rgba(255, 255, 255, 0.06),
     transparent 55%
   );
@@ -195,13 +217,24 @@ body::after {
 .phoenixlogo {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 0.375rem;
   text-decoration: none;
-  font-size: 1.2rem;
-  font-weight: 500;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text);
+  font-family: var(--font-space-grotesk), sans-serif;
+  letter-spacing: -0.01em;
 }
+
 .phoenix-logo {
   object-fit: contain;
+}
+
+.ui-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.025);
+  border: 0.0625rem solid var(--border);
+  border-radius: var(--radius-lg);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -216,7 +249,7 @@ body::after {
 @keyframes fadeInLeftSoft {
   from {
     opacity: 0.85;
-    transform: translateX(-10px);
+    transform: translateX(-0.625rem);
   }
   to {
     opacity: 1;
@@ -227,7 +260,7 @@ body::after {
 @keyframes fadeInRightSoft {
   from {
     opacity: 0.85;
-    transform: translateX(10px);
+    transform: translateX(0.625rem);
   }
   to {
     opacity: 1;

@@ -1,9 +1,19 @@
+import type { Metadata } from "next";
 import "./terms.css";
 
-export const metadata = {
-  title: "Terms & Conditions — Dot Phoenix Solutions",
+export const metadata: Metadata = {
+  title: "Terms & Conditions | Dot Phoenix Solutions",
   description:
     "Terms and Conditions governing the use of Dot Phoenix Solutions website, products, and services.",
+  alternates: {
+    canonical: "/resources/terms-and-conditions",
+  },
+  openGraph: {
+    title: "Terms & Conditions | Dot Phoenix Solutions",
+    description:
+      "Terms and Conditions governing the use of Dot Phoenix Solutions website, products, and services.",
+    url: "/resources/terms-and-conditions",
+  },
 };
 
 export default function TermsAndConditionsPage() {

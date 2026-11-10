@@ -25,7 +25,7 @@ export default function Header() {
 
     const y = window.scrollY;
     document.body.style.position = "fixed";
-    document.body.style.top = `-${y}px`;
+    document.body.style.top = `-${y / 16}rem`;
     document.body.style.width = "100%";
 
     return () => {
@@ -49,16 +49,16 @@ export default function Header() {
         <Link href="/" className="phoenixlogo flex items-center gap-2">
           <Image
             src="/phoenixlogo.svg"
-            alt="Dot Phoenix Solutions logos"
-            width={50}
-            height={50}
+            alt="Dot Phoenix Solutions logo"
+            width={44}
+            height={44}
             priority
             className="phoenix-logo"
           />
           <span>Dot Phoenix</span>
         </Link>
 
-        <nav className="nav-desktop">
+        <nav className="nav-desktop" aria-label="Main Navigation">
           <ul className="nav-list">
             {navItems.map((item) => (
               <li key={item.href}>
@@ -70,7 +70,12 @@ export default function Header() {
           </ul>
         </nav>
 
-        <button className="menu-toggle" onClick={() => setOpen(true)}>
+        <button
+          className="menu-toggle"
+          onClick={() => setOpen(true)}
+          aria-label="Open navigation menu"
+          aria-expanded={open}
+        >
           ☰
         </button>
       </Container>
@@ -78,13 +83,17 @@ export default function Header() {
       <div className="mobile-nav-wrap">
         <div className="nav-mobile">
           <div className="mobile-nav-header">
-            <span className="mobile-logo"> Dot Phoenix</span>
-            <button className="mobile-close" onClick={() => setOpen(false)}>
+            <span className="mobile-logo">Dot Phoenix</span>
+            <button
+              className="mobile-close"
+              onClick={() => setOpen(false)}
+              aria-label="Close navigation menu"
+            >
               ✕
             </button>
           </div>
 
-          <ul className="mobile-nav-list">
+          <ul className="mobile-nav-list" aria-label="Mobile Navigation">
             {navItems.map((item) => (
               <li key={item.href} className="mobile-nav-item">
                 <button

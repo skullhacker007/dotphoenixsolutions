@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import {
   Quote,
@@ -20,6 +21,21 @@ import {
 import WhyChoose from "@/components/WhyChoose";
 
 import "./company.css";
+
+export const metadata: Metadata = {
+  title: "About Our Company | Dot Phoenix Solutions",
+  description:
+    "Learn about Dot Phoenix Solutions: our mission, leadership, core values, and vision for AI-driven digital automation.",
+  alternates: {
+    canonical: "/company",
+  },
+  openGraph: {
+    title: "About Dot Phoenix Solutions | AI-Driven Automation",
+    description:
+      "Leading the future of intelligent automation. Learn about our vision, values, and enterprise technology services.",
+    url: "/company",
+  },
+};
 
 type ValueProps = {
   icon: LucideIcon;
@@ -68,7 +84,7 @@ export default function CompanyPage() {
                   alt="Dot Phoenix Solutions logo"
                   fill
                   priority
-                  sizes="(max-width: 768px) 180px, 320px"
+                  sizes="(max-width: 48rem) 11.25rem, 20rem"
                   className="phoenix-image"
                 />
               </div>

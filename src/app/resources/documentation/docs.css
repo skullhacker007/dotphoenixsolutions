@@ -7,23 +7,18 @@
 }
 
 .doc-wrapper {
-  max-width: 56.25rem;
+  max-width: min(88rem, 100%);
   margin-inline: auto;
-  padding: 3rem 1.25rem;
-  font-family:
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Roboto,
-    Arial,
-    sans-serif;
+  padding: clamp(2rem, 3.5vw, 4rem) clamp(1.25rem, 3.5vw, 3.5rem);
+  font-family: inherit;
   line-height: 1.75;
   color: var(--doc-text);
   background: var(--doc-bg);
+  width: 100%;
 }
 
 .doc-header h1 {
-  font-size: clamp(2rem, 4vw, 2.6rem);
+  font-size: clamp(2.25rem, 2rem + 1.8vw, 3.5rem);
   font-weight: 600;
   margin-bottom: 1rem;
   color: var(--doc-heading);
@@ -31,8 +26,8 @@
 }
 
 .doc-header p {
-  max-width: 52rem;
-  font-size: 1.05rem;
+  max-width: 65rem;
+  font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
   color: var(--doc-muted);
 }
 
