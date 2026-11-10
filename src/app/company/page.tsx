@@ -64,7 +64,7 @@ export default function CompanyPage() {
             <div className="company-intro-image">
               <div className="phoenix-image-wrapper">
                 <Image
-                  src="phoenixlogo.svg"
+                  src="/phoenixlogo.svg"
                   alt="Dot Phoenix Solutions logo"
                   fill
                   priority

@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { isValidPhoneNumber, formatToE164 } from "@/lib/phone";
+import type { CountryCode } from "libphonenumber-js";
 import "./SidebarForm.css";
 
 /* ------------------ constants ------------------ */
@@ -79,6 +81,7 @@ export default function SidebarForm({ open, onClose }: SidebarFormProps) {
   const [countryCodes, setCountryCodes] = useState<CountryCodeItem[]>([]);
   const [countryLoading, setCountryLoading] = useState(false);
   const [selectedCountryCode, setSelectedCountryCode] = useState("+91");
+  const [selectedIso, setSelectedIso] = useState<string>("IN");
 
   const [lastSubmit, setLastSubmit] = useState(0);
 
@@ -102,24 +105,39 @@ export default function SidebarForm({ open, onClose }: SidebarFormProps) {
   useEffect(() => {
     if (!open || countryCodes.length > 0) return;
 
-    setCountryLoading(true);
+    let ignore = false;
 
-    fetch("/api/country")
-      .then((res) => {
+    const loadCountries = async () => {
+      try {
+        setCountryLoading(true);
+        const res = await fetch("/api/country");
         if (!res.ok) throw new Error();
-        return res.json();
-      })
-      .then((data: CountryCodeItem[]) => {
+        const data: CountryCodeItem[] = await res.json();
+        if (ignore) return;
         setCountryCodes(data);
         const india = data.find((c) => c.iso === "IN");
-        if (india) setSelectedCountryCode(india.code);
-      })
-      .catch(() => {
-        setCountryCodes([
-          { country: "India", iso: "IN", code: "+91", label: "India (+91)" },
-        ]);
-      })
-      .finally(() => setCountryLoading(false));
+        if (india) {
+          setSelectedCountryCode(india.code);
+          setSelectedIso(india.iso);
+        }
+      } catch {
+        if (!ignore) {
+          setCountryCodes([
+            { country: "India", iso: "IN", code: "+91", label: "India (+91)" },
+          ]);
+        }
+      } finally {
+        if (!ignore) {
+          setCountryLoading(false);
+        }
+      }
+    };
+
+    void loadCountries();
+
+    return () => {
+      ignore = true;
+    };
   }, [open, countryCodes.length]);
 
   /* ------------------ submit ------------------ */
@@ -147,7 +165,11 @@ export default function SidebarForm({ open, onClose }: SidebarFormProps) {
       return;
     }
 
-    if (!phone || !isValidPhone(phone)) {
+    const countryIso = (selectedIso || "IN") as CountryCode;
+    const isPhoneValid =
+      isValidPhoneNumber(phone, countryIso) || isValidPhone(phone);
+
+    if (!phone || !isPhoneValid) {
       setFieldError({
         field: "phone",
         message: "Enter a valid contact number.",
@@ -155,6 +177,9 @@ export default function SidebarForm({ open, onClose }: SidebarFormProps) {
       phoneRef.current?.focus();
       return;
     }
+
+    const formattedPhone =
+      formatToE164(phone, countryIso) || `${selectedCountryCode}${phone}`;
 
     setFieldError({ field: null, message: "" });
     setStatus("loading");
@@ -165,7 +190,7 @@ export default function SidebarForm({ open, onClose }: SidebarFormProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email,
-          phone: `${selectedCountryCode}${phone}`,
+          phone: formattedPhone,
           requirement,
           subCategory: formData.get("subCategory"),
           message,
@@ -239,12 +264,18 @@ export default function SidebarForm({ open, onClose }: SidebarFormProps) {
           <label>Contact Number</label>
           <div className="phone-group">
             <select
-              value={selectedCountryCode}
-              onChange={(e) => setSelectedCountryCode(e.target.value)}
+              value={`${selectedIso}-${selectedCountryCode}`}
+              onChange={(e) => {
+                const parts = e.target.value.split("-");
+                if (parts.length >= 2) {
+                  setSelectedIso(parts[0]);
+                  setSelectedCountryCode(parts[1]);
+                }
+              }}
               disabled={countryLoading || status === "loading"}
             >
               {countryCodes.map((c) => (
-                <option key={`${c.iso}-${c.code}`} value={c.code}>
+                <option key={`${c.iso}-${c.code}`} value={`${c.iso}-${c.code}`}>
                   {c.label}
                 </option>
               ))}

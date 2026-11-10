@@ -15,20 +15,36 @@ const MAX_SOURCE_LENGTH = 200;
 
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
 const RATE_LIMIT_MAX = 5;
+const MAX_RATE_LIMIT_ENTRIES = 5000;
 
-// Basic in-memory rate limiter.
-// Note: For multi-instance/serverless production deployments,
-// use Redis or another shared rate-limit store.
 const rateLimitStore = new Map<
   string,
   { count: number; resetAt: number }
 >();
 
+function cleanupRateLimitStore(now: number) {
+  if (rateLimitStore.size > MAX_RATE_LIMIT_ENTRIES) {
+    for (const [ip, entry] of rateLimitStore.entries()) {
+      if (entry.resetAt <= now) {
+        rateLimitStore.delete(ip);
+      }
+    }
+    if (rateLimitStore.size > MAX_RATE_LIMIT_ENTRIES) {
+      const oldestKeys = Array.from(rateLimitStore.keys()).slice(0, 1000);
+      for (const k of oldestKeys) {
+        rateLimitStore.delete(k);
+      }
+    }
+  }
+}
+
 const RESPONSE_HEADERS = {
-  "Cache-Control": "no-store",
+  "Cache-Control": "no-store, no-cache, must-revalidate",
+  "X-Content-Type-Options": "nosniff",
 };
 
 interface ContactRequestBody {
+  company?: unknown; // Honeypot field
   email?: unknown;
   phone?: unknown;
   requirement?: unknown;
@@ -84,17 +100,28 @@ export async function POST(req: Request) {
 
     const input = body as ContactRequestBody;
 
-    // 4. Sanitize inputs
+    // 4. Honeypot verification (silent drop for automated bots)
+    if (
+      typeof input.company === "string" &&
+      input.company.trim().length > 0
+    ) {
+      return NextResponse.json(
+        { success: true },
+        { status: 200, headers: RESPONSE_HEADERS },
+      );
+    }
+
+    // 5. Sanitize inputs
     const payload = {
-      email: sanitize(input.email),
-      phone: sanitize(input.phone),
-      requirement: sanitize(input.requirement),
-      subCategory: sanitize(input.subCategory),
-      message: sanitize(input.message),
-      source: sanitize(input.source),
+      email: sanitizeSingleLine(input.email),
+      phone: sanitizeSingleLine(input.phone),
+      requirement: sanitizeSingleLine(input.requirement),
+      subCategory: sanitizeSingleLine(input.subCategory),
+      message: sanitizeMultiLine(input.message),
+      source: sanitizeSingleLine(input.source),
     };
 
-    // 5. Validate required fields
+    // 6. Validate required fields
     if (!payload.email) {
       return NextResponse.json(
         { error: "Email is required" },
@@ -102,7 +129,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 6. Validate field lengths
+    // 7. Validate field lengths
     const limits: Record<string, number> = {
       email: MAX_EMAIL_LENGTH,
       phone: MAX_PHONE_LENGTH,
@@ -121,7 +148,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 7. Validate email
+    // 8. Validate email format
     if (!isValidEmail(payload.email)) {
       return NextResponse.json(
         { error: "Invalid email address" },
@@ -129,16 +156,17 @@ export async function POST(req: Request) {
       );
     }
 
-    // 8. Rate limiting
-    // Uses forwarded IP headers. Configure trusted proxy handling
-    // appropriately for your deployment platform.
+    // 9. Rate limiting
     const forwardedFor = req.headers.get("x-forwarded-for");
-    const clientIp =
+    const rawIp =
       forwardedFor?.split(",")[0]?.trim() ||
       req.headers.get("x-real-ip") ||
       "unknown";
+    const clientIp = rawIp.replace(/[^a-zA-Z0-9.:_-]/g, "").slice(0, 45);
 
     const now = Date.now();
+    cleanupRateLimitStore(now);
+
     const rateLimit = rateLimitStore.get(clientIp);
 
     if (rateLimit && now < rateLimit.resetAt) {
@@ -165,7 +193,7 @@ export async function POST(req: Request) {
       });
     }
 
-    // 9. Send email
+    // 10. Send email
     try {
       await sendContactEmail(payload);
     } catch (error) {
@@ -177,7 +205,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 10. Success
+    // 11. Success
     return NextResponse.json(
       { success: true },
       { status: 200, headers: RESPONSE_HEADERS },
@@ -194,13 +222,17 @@ export async function POST(req: Request) {
 
 /* ---------- Helpers ---------- */
 
-function sanitize(value: unknown): string {
+function sanitizeSingleLine(value: unknown): string {
+  if (typeof value !== "string") return "";
+  return value.replace(/[\r\n\t]/g, " ").trim();
+}
+
+function sanitizeMultiLine(value: unknown): string {
   if (typeof value !== "string") return "";
   return value.trim();
 }
 
 function isValidEmail(email: string): boolean {
   if (email.length > MAX_EMAIL_LENGTH) return false;
-
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }

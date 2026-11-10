@@ -1,5 +1,6 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
 import { Button, Container } from "./ui";
 import "./process.css";
 import {
@@ -12,7 +13,16 @@ import {
 } from "recharts";
 import { dashboardChartData } from "./ui/chartData";
 
+const emptySubscribe = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
 export default function Process() {
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    getClientSnapshot,
+    getServerSnapshot,
+  );
   return (
     <section className="process-section">
       <Container>
@@ -90,42 +100,46 @@ export default function Process() {
                 </div>
 
                 <div className="dashboard-chart dashboard-chart-real">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={dashboardChartData}>
-                      <CartesianGrid stroke="rgba(255,255,255,0.08)" />
-                      <XAxis
-                        dataKey="month"
-                        stroke="#9aa0a6"
-                        tick={{ fontSize: 10 }}
-                      />
-                      <YAxis
-                        width={25}
-                        stroke="#9aa0a6"
-                        tick={{ fontSize: 10 }}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="revenue"
-                        stroke="#6d9cff"
-                        strokeWidth={2.5}
-                        dot={false}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="orders"
-                        stroke="rgba(120,160,255,0.6)"
-                        strokeWidth={2}
-                        dot={false}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="growth"
-                        stroke="hsla(0, 0%, 100%, 0.35)"
-                        strokeWidth={1.5}
-                        dot={false}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
+                  {mounted ? (
+                    <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={160}>
+                      <LineChart data={dashboardChartData}>
+                        <CartesianGrid stroke="rgba(255,255,255,0.08)" />
+                        <XAxis
+                          dataKey="month"
+                          stroke="#9aa0a6"
+                          tick={{ fontSize: 10 }}
+                        />
+                        <YAxis
+                          width={25}
+                          stroke="#9aa0a6"
+                          tick={{ fontSize: 10 }}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="revenue"
+                          stroke="#6d9cff"
+                          strokeWidth={2.5}
+                          dot={false}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="orders"
+                          stroke="rgba(120,160,255,0.6)"
+                          strokeWidth={2}
+                          dot={false}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="growth"
+                          stroke="hsla(0, 0%, 100%, 0.35)"
+                          strokeWidth={1.5}
+                          dot={false}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div style={{ width: "100%", height: "100%" }} />
+                  )}
                 </div>
               </div>
             </div>

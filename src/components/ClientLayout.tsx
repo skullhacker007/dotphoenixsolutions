@@ -54,11 +54,15 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
       if (!lenisRef.current) return;
 
       if (typeof target === "string") {
-        const el = document.querySelector(target);
-        if (el instanceof HTMLElement) {
-          lenisRef.current.scrollTo(el);
+        try {
+          const el = document.querySelector(target);
+          if (el instanceof HTMLElement) {
+            lenisRef.current.scrollTo(el);
+          }
+        } catch {
+          // Ignore invalid selector syntax
         }
-      } else {
+      } else if (target instanceof HTMLElement) {
         lenisRef.current.scrollTo(target);
       }
     };

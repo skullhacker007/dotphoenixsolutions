@@ -24,7 +24,7 @@ export default function PrivacyPolicyPage() {
           Welcome, and thank you for your interest in Dot Phoenix Solutions
           (&quot;Dot phoenix&quot;, &quot;we&quot;, &quot;us&quot;, or
           &quot;our&quot;) and our website located at
-          https://www.dotphoenix.com, including any subdomains, mobile versions,
+          https://dotphoenixsolutions.com, including any subdomains, mobile versions,
           and related services (collectively, the &quot;Site&quot;).
         </p>
 

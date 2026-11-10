@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useSyncExternalStore } from "react";
 import {
   ResponsiveContainer,
   LineChart,
@@ -13,7 +13,16 @@ import {
 import { dashboardChartData } from "@/components/ui/chartData";
 import "./servicevisuals.css";
 
+const emptySubscribe = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
 export default function SaasVisual() {
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    getClientSnapshot,
+    getServerSnapshot,
+  );
   return (
     <div className="saas-visual">
       <div className="saas-visual-frame">
@@ -71,39 +80,43 @@ export default function SaasVisual() {
 
           {/* CHART */}
           <div className="saas-visual-chart">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={dashboardChartData}>
-                <CartesianGrid stroke="rgba(255,255,255,0.08)" />
-                <XAxis
-                  dataKey="month"
-                  tick={{ fontSize: 10 }}
-                  stroke="#94a3b8"
-                />
-                <YAxis width={28} tick={{ fontSize: 10 }} stroke="#94a3b8" />
+            {mounted ? (
+              <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={160}>
+                <LineChart data={dashboardChartData}>
+                  <CartesianGrid stroke="rgba(255,255,255,0.08)" />
+                  <XAxis
+                    dataKey="month"
+                    tick={{ fontSize: 10 }}
+                    stroke="#94a3b8"
+                  />
+                  <YAxis width={28} tick={{ fontSize: 10 }} stroke="#94a3b8" />
 
-                <Line
-                  type="monotone"
-                  dataKey="revenue"
-                  stroke="#6d9cff"
-                  strokeWidth={2.5}
-                  dot={false}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="orders"
-                  stroke="rgba(120,160,255,0.6)"
-                  strokeWidth={2}
-                  dot={false}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="growth"
-                  stroke="rgba(255,255,255,0.35)"
-                  strokeWidth={1.5}
-                  dot={false}
-                />
-              </LineChart>
-            </ResponsiveContainer>
+                  <Line
+                    type="monotone"
+                    dataKey="revenue"
+                    stroke="#6d9cff"
+                    strokeWidth={2.5}
+                    dot={false}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="orders"
+                    stroke="rgba(120,160,255,0.6)"
+                    strokeWidth={2}
+                    dot={false}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="growth"
+                    stroke="rgba(255,255,255,0.35)"
+                    strokeWidth={1.5}
+                    dot={false}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            ) : (
+              <div style={{ width: "100%", height: "100%" }} />
+            )}
           </div>
         </div>
       </div>

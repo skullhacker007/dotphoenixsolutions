@@ -8,12 +8,13 @@ import ClientLayout from "@/components/ClientLayout";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://dotphoenix.com"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://dotphoenixsolutions.com",
+  ),
 
   title: {
     default: "Dot Phoenix Solutions | AI-Driven Digital Automation",
@@ -30,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://dotphoenix.com",
+    url: "https://dotphoenixsolutions.com",
     siteName: "Dot Phoenix Solutions",
     title: "Dot Phoenix Solutions | AI-Driven Digital Automation",
     description:

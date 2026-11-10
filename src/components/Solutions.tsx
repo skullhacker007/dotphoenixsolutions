@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Card, Container, Text } from "./ui";
 import "./solutions.css";
 
@@ -13,16 +14,24 @@ export default function Solutions() {
 
         <div className="solutions-layout">
           <div className="solutions-list">
-            <Card className="solution-item">
-              Technology & Product Platforms
-            </Card>
-            <Card className="solution-item">
-              Business Process & Legal Solutions
-            </Card>
-            <Card className="solution-item">
-              Financial Services & FinTech Systems
-            </Card>
-            <Card className="solution-item">Healthcare & Medical Systems</Card>
+            <Link href="/solutions" style={{ textDecoration: "none", color: "inherit" }}>
+              <Card className="solution-item">
+                Technology & Product Platforms
+              </Card>
+            </Link>
+            <Link href="/solutions" style={{ textDecoration: "none", color: "inherit" }}>
+              <Card className="solution-item">
+                Business Process & Legal Solutions
+              </Card>
+            </Link>
+            <Link href="/solutions" style={{ textDecoration: "none", color: "inherit" }}>
+              <Card className="solution-item">
+                Financial Services & FinTech Systems
+              </Card>
+            </Link>
+            <Link href="/solutions" style={{ textDecoration: "none", color: "inherit" }}>
+              <Card className="solution-item">Healthcare & Medical Systems</Card>
+            </Link>
           </div>
 
           <div className="solutions-center">
@@ -30,14 +39,22 @@ export default function Solutions() {
           </div>
 
           <div className="solutions-list">
-            <Card className="solution-item">Insurance Platforms</Card>
-            <Card className="solution-item">Retail & E-commerce Solutions</Card>
-            <Card className="solution-item">
-              Manufacturing & Industrial Systems
-            </Card>
-            <Card className="solution-item">
-              Education, Training & Research Platforms
-            </Card>
+            <Link href="/solutions" style={{ textDecoration: "none", color: "inherit" }}>
+              <Card className="solution-item">Insurance Platforms</Card>
+            </Link>
+            <Link href="/solutions" style={{ textDecoration: "none", color: "inherit" }}>
+              <Card className="solution-item">Retail & E-commerce Solutions</Card>
+            </Link>
+            <Link href="/solutions" style={{ textDecoration: "none", color: "inherit" }}>
+              <Card className="solution-item">
+                Manufacturing & Industrial Systems
+              </Card>
+            </Link>
+            <Link href="/solutions" style={{ textDecoration: "none", color: "inherit" }}>
+              <Card className="solution-item">
+                Education, Training & Research Platforms
+              </Card>
+            </Link>
           </div>
         </div>
       </Container>

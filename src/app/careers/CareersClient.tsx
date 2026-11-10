@@ -123,8 +123,8 @@ export default function CareersClient() {
           <h3>Tools & Technologies</h3>
           <ul className="skills">
             <li>Python</li>
-            <li>Frameworks</li>
-            <li>AI Services</li>
+            <li>PyTorch / LangChain</li>
+            <li>LLM APIs & RAG</li>
           </ul>
         </article>
 
@@ -143,9 +143,9 @@ export default function CareersClient() {
 
           <h3>Tools & Technologies</h3>
           <ul className="skills">
-            <li>Analytics</li>
-            <li>Tools</li>
-            <li>Automation</li>
+            <li>Google Analytics 4</li>
+            <li>Meta & Google Ads</li>
+            <li>SEO / SEMrush</li>
           </ul>
         </article>
       </section>
