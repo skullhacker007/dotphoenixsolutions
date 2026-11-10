@@ -1,99 +1,48 @@
 import { NextResponse } from "next/server";
 
-/* ------------------ types ------------------ */
-
-// Raw API response shape
-type RestCountry = {
-  name?: {
-    common?: string;
-  };
-  cca2?: string;
-  idd?: {
-    root?: string;
-    suffixes?: string[];
-  };
-};
-
-// Sanitized response shape
-type CountryCodeItem = {
-  country: string;
-  iso: string;
+type ApiCountry = {
+  name: string;
   code: string;
-  label: string;
+  dialCode: string;
+  flag?: string;
 };
 
-/* ------------------ helpers ------------------ */
-
-/**
- * Strong type guard
- * Ensures required country fields exist
- */
-function isValidCountry(c: RestCountry): c is {
-  name: { common: string };
-  cca2: string;
-  idd: { root: string; suffixes: string[] };
-} {
-  return (
-    typeof c.name?.common === "string" &&
-    typeof c.cca2 === "string" &&
-    typeof c.idd?.root === "string" &&
-    Array.isArray(c.idd.suffixes) &&
-    c.idd.suffixes.length > 0
-  );
-}
-
-/* ------------------ route ------------------ */
-
-/**
- * GET /api/country
- * Returns country calling codes
- */
 export async function GET() {
   try {
     const response = await fetch(
-      "https://restcountries.com/v3.1/all?fields=name,idd,cca2",
-      {
-        // ✅ Correct caching strategy for API routes
-        next: { revalidate: 60 * 60 * 24 * 30 }, // 30 days
-      },
+      "https://www.countrycalling.codes/api/calling-codes?limit=250",
+      { next: { revalidate: 86400 } },
     );
 
     if (!response.ok) {
-      throw new Error("Failed to fetch country data");
+      throw new Error(`Country API failed: ${response.status}`);
     }
 
-    const data: RestCountry[] = await response.json();
+    const data = await response.json();
+    const records: ApiCountry[] = data.countries;
 
-    const countries: CountryCodeItem[] = data
-      .filter(isValidCountry)
-      .flatMap((c) => {
-        const country = c.name.common;
-        const iso = c.cca2;
-        const root = c.idd.root;
-        const suffixes = c.idd.suffixes;
+    if (!Array.isArray(records)) {
+      throw new Error("Invalid country API response");
+    }
 
-        return suffixes.map((suffix) => {
-          const code = `${root}${suffix}`;
-          return {
-            country,
-            iso,
-            code,
-            label: `${country} (${code})`,
-          };
-        });
-      })
+    const countries = records
+      .filter((item) => item.name && item.code && item.dialCode)
+      .map((item) => ({
+        country: item.name,
+        iso: item.code,
+        code: item.dialCode,
+        flag: item.flag ?? "",
+        label: `${item.name} (${item.dialCode})`,
+      }))
       .sort((a, b) => a.country.localeCompare(b.country));
 
-    return NextResponse.json(countries, {
-      status: 200,
-      headers: {
-        "Cache-Control": "public, max-age=2592000",
-      },
-    });
+    return NextResponse.json(countries);
   } catch (error) {
-    console.error("Country API error:", error);
+    console.error("Country calling codes error:", error);
 
-    // Safe fallback — never break the form
-    return NextResponse.json([], { status: 200 });
+    return NextResponse.json(
+      { error: "Unable to fetch country calling codes" },
+      { status: 500 },
+    );
   }
 }
