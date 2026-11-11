@@ -61,7 +61,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   SVG STRAIGHT & L-LINE CONDUIT CHANNELS (FROM BOTTOM ONLY, ZERO CURVES)
+   SVG STRAIGHT & L-LINE CONDUIT CHANNELS & EXACT-CENTER SOURCE DOTS
    -------------------------------------------------------------------------- */
 .services-tree-svg {
   position: absolute;
@@ -120,8 +120,23 @@
   }
 }
 
+/* Source Dots: Locked to Exact Center of Path Start */
+.service-source-dot {
+  fill: #ff9838;
+  filter: drop-shadow(0 0 6px rgba(255, 152, 56, 0.9));
+  transition:
+    r 0.3s ease,
+    fill 0.3s ease,
+    filter 0.3s ease;
+}
+
+.service-source-dot.active {
+  fill: #ffffff;
+  filter: drop-shadow(0 0 10px rgba(255, 160, 60, 1));
+}
+
 /* --------------------------------------------------------------------------
-   PARENT ROOT NODE — MASTER COMMAND CENTER (BOTTOM PORTS ONLY)
+   PARENT ROOT NODE — MASTER COMMAND CENTER
    -------------------------------------------------------------------------- */
 .services-parent-node-wrap {
   position: relative;
@@ -262,46 +277,6 @@
   letter-spacing: -0.01em;
 }
 
-/* 3 Docking Ports on Bottom Edge Only */
-.parent-docking-ports {
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 100%;
-  height: 8px;
-  pointer-events: none;
-}
-
-.parent-port-pin {
-  position: absolute;
-  top: 0;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #ff9838;
-  box-shadow: 0 0 7px #ff9838;
-  transform: translateX(-50%);
-  transition: all 0.3s ease;
-}
-
-.parent-port-pin.port-0 {
-  left: 22%;
-}
-
-.parent-port-pin.port-1 {
-  left: 50%;
-}
-
-.parent-port-pin.port-2 {
-  left: 78%;
-}
-
-.parent-port-pin.active {
-  background: #ffffff;
-  box-shadow: 0 0 12px rgba(255, 160, 60, 1);
-  transform: scale(1.35) translateX(-50%);
-}
-
 /* --------------------------------------------------------------------------
    3-COLUMN SPACIOUS ENTERPRISE PILLARS
    -------------------------------------------------------------------------- */
@@ -440,7 +415,6 @@
 .service-icon-svg {
   width: 1.25rem;
   height: 1.25rem;
-  color: #ff9838;
   flex-shrink: 0;
   transition: transform 0.25s ease, filter 0.25s ease;
 }

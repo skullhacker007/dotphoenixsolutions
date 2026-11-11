@@ -12,8 +12,8 @@ import {
   Bot,
   Database,
   TrendingUp,
-  Cpu,
-} from "lucide-react";
+} 
+from "lucide-react";
 import "./services.css";
 
 interface ServiceItem {
@@ -35,6 +35,13 @@ interface ChannelPath {
   id: string;
   path: string;
   activeId: string;
+}
+
+interface SourceDot {
+  id: string;
+  x: number;
+  y: number;
+  active: boolean;
 }
 
 const TREE_DATA: PillarItem[] = [
@@ -125,6 +132,7 @@ export default function Services() {
   const [userHoveredId, setUserHoveredId] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
   const [channels, setChannels] = useState<ChannelPath[]>([]);
+  const [sourceDots, setSourceDots] = useState<SourceDot[]>([]);
   const [svgDimensions, setSvgDimensions] = useState({ width: 0, height: 0 });
 
   const activeId = userHoveredId ?? autoActiveId;
@@ -157,12 +165,27 @@ export default function Services() {
 
     const pLeft = parentRect.left - layoutRect.left;
     const pWidth = parentRect.width;
+    const pCenterX = pLeft + pWidth / 2;
     const pStartY = parentRect.bottom - layoutRect.top;
 
-    // 3 distinct source points along the bottom edge only (22%, 50%, 78%)
-    const sourceRatios = [0.22, 0.5, 0.78];
+    // Get the center X of the center pillar to ensure 100% vertical center line
+    const centerPillarEl = pillarRefs.current[1];
+    const centerPillarX = centerPillarEl
+      ? centerPillarEl.getBoundingClientRect().left +
+        centerPillarEl.getBoundingClientRect().width / 2 -
+        layoutRect.left
+      : pCenterX;
+
+    // Symmetrical source point offsets on the bottom of parent card
+    const sourceOffset = Math.min(pWidth * 0.28, 125);
+    const sourceXs = [
+      pCenterX - sourceOffset, // Left Cluster port
+      centerPillarX,           // Center Cluster port (exact vertical alignment)
+      pCenterX + sourceOffset, // Right Cluster port
+    ];
 
     const newChannels: ChannelPath[] = [];
+    const newSourceDots: SourceDot[] = [];
 
     TREE_DATA.forEach((pillar, pIdx) => {
       const pEl = pillarRefs.current[pIdx];
@@ -172,10 +195,10 @@ export default function Services() {
       const bTopY = pRect.top - layoutRect.top;
       const bBottomY = pRect.bottom - layoutRect.top;
 
-      // Source point on the bottom of the parent node
-      const pStartX = pLeft + pWidth * sourceRatios[pIdx];
+      // Exact start point for this path
+      const pStartX = sourceXs[pIdx];
 
-      // Midpoint Y for orthogonal right-angle step
+      // Midpoint Y for crisp orthogonal right-angle step
       const dy = Math.max(bTopY - pStartY, 30);
       const midY = pStartY + dy * 0.48;
 
@@ -185,7 +208,7 @@ export default function Services() {
         // Left Cluster: Down from bottom port -> 90° horizontal left -> 90° down into cluster
         pillarChannelPath = `M ${pStartX} ${pStartY} L ${pStartX} ${midY} L ${bTopX} ${midY} L ${bTopX} ${bTopY}`;
       } else if (pIdx === 1) {
-        // Center Cluster: Direct straight vertical line down from center bottom port
+        // Center Cluster: Direct pure vertical line down from center port
         pillarChannelPath = `M ${pStartX} ${pStartY} L ${bTopX} ${bTopY}`;
       } else {
         // Right Cluster: Down from bottom port -> 90° horizontal right -> 90° down into cluster
@@ -198,7 +221,19 @@ export default function Services() {
         activeId: pillar.id,
       });
 
-      // Sequential straight vertical channels down through cards (No bends)
+      // Exact source dot rendered at (pStartX, pStartY) - 100% centered on path
+      const isPillarActive =
+        activeId === pillar.id ||
+        pillar.services.some((s) => s.id === activeId);
+
+      newSourceDots.push({
+        id: `source-dot-${pillar.id}`,
+        x: pStartX,
+        y: pStartY,
+        active: isPillarActive,
+      });
+
+      // Sequential straight vertical channels down through cards
       let prevBottomY = bBottomY;
       let prevX = bTopX;
 
@@ -222,9 +257,10 @@ export default function Services() {
     });
 
     setChannels(newChannels);
+    setSourceDots(newSourceDots);
     setSvgDimensions({ width: layoutRect.width, height: layoutRect.height });
     setMounted(true);
-  }, []);
+  }, [activeId]);
 
   useEffect(() => {
     updateConnections();
@@ -249,17 +285,13 @@ export default function Services() {
     };
   }, [updateConnections]);
 
-  const activePillarIndex = TREE_DATA.findIndex(
-    (p) => p.id === activeId || p.services.some((s) => s.id === activeId)
-  );
-
   return (
     <section className="services-tree-section" id="services">
       <div className="services-grid-backdrop" aria-hidden="true" />
 
       <Container className="services-tree-container">
         <div className="services-tree-layout" ref={treeLayoutRef}>
-          {/* Dynamic SVG Conduit Channels with Straight and L-Lines (From Bottom Only) */}
+          {/* Dynamic SVG Conduit Channels with Exact-Center Source Dots */}
           {mounted && svgDimensions.width > 0 && (
             <svg
               className="services-tree-svg"
@@ -289,10 +321,21 @@ export default function Services() {
                   </g>
                 );
               })}
+
+              {/* Source Dots Centered Exactly on the Path Coordinates */}
+              {sourceDots.map((dot) => (
+                <circle
+                  key={dot.id}
+                  cx={dot.x}
+                  cy={dot.y}
+                  r={dot.active ? 4.5 : 3.5}
+                  className={`service-source-dot ${dot.active ? "active" : ""}`}
+                />
+              ))}
             </svg>
           )}
 
-          {/* PARENT ROOT NODE WITH 3 DOCKING PORTS ON BOTTOM ONLY */}
+          {/* PARENT ROOT NODE — MASTER COMMAND CENTER */}
           <div className="services-parent-node-wrap">
             <div
               ref={parentNodeRef}
@@ -300,34 +343,15 @@ export default function Services() {
               onMouseEnter={() => setUserHoveredId("parent")}
               onMouseLeave={() => setUserHoveredId(null)}
             >
-           <div className="parent-node-main">
-                <div className="parent-node-icon-wrap">
-                  <Cpu className="parent-core-icon" />
-                </div>
+              <div className="parent-node-main">
                 <div className="parent-node-text-wrap">
                   <h3 className="parent-node-title">Dot Phoenix Services</h3>
-                  <span className="parent-node-subtitle">
-                    Central Intelligence Core & Multi-Agent Architecture
-                  </span>
                 </div>
-              </div>
-
-              {/* 3 Docking Ports on Bottom Edge Only */}
-              <div className="parent-docking-ports" aria-hidden="true">
-                <span
-                  className={`parent-port-pin port-0 ${activePillarIndex === 0 ? "active" : ""}`}
-                />
-                <span
-                  className={`parent-port-pin port-1 ${activePillarIndex === 1 ? "active" : ""}`}
-                />
-                <span
-                  className={`parent-port-pin port-2 ${activePillarIndex === 2 ? "active" : ""}`}
-                />
               </div>
             </div>
           </div>
 
-          {/* 3 EQUALLY SPACED PILLARS WITH STRAIGHT / L-LINE CHANNELS */}
+          {/* 3 EQUALLY SPACED PILLARS WITH AUTOMATIC FLOW */}
           <div className="services-pillars-row">
             {TREE_DATA.map((pillar, pIdx) => {
               const isPillarActive =
