@@ -31,7 +31,6 @@ export default function Page() {
       <Process />
       <Solutions />
       <Digital />
-      <WhyChoose />
     </div>
   );
 }

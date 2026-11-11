@@ -214,7 +214,7 @@ export default function DocumentationPage() {
         <ul>
           <li>500+ successful projects delivered</li>
           <li>7+ countries served globally</li>
-          <li>9+ years of industry experience</li>
+          <li>3+ years of industry experience</li>
         </ul>
       </section>
 

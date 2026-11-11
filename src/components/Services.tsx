@@ -1,4 +1,7 @@
-import { Card, Container, Text } from "./ui";
+"use client";
+
+import { useEffect, useRef, useState, useCallback } from "react";
+import { Container } from "./ui";
 import {
   Globe,
   Smartphone,
@@ -6,83 +9,386 @@ import {
   BrainCircuit,
   Megaphone,
   Building2,
+  Bot,
+  Database,
+  TrendingUp,
+  Cpu,
 } from "lucide-react";
 import "./services.css";
 
+interface ServiceItem {
+  id: string;
+  title: string;
+  tag: string;
+  icon: React.ComponentType<{ className?: string }>;
+}
+
+interface PillarItem {
+  id: string;
+  code: string;
+  badge: string;
+  title: string;
+  services: ServiceItem[];
+}
+
+interface ChannelPath {
+  id: string;
+  path: string;
+  activeId: string;
+}
+
+const TREE_DATA: PillarItem[] = [
+  {
+    id: "pillar-ai",
+    code: "CLUSTER 01",
+    badge: "COGNITIVE",
+    title: "Agentic AI & Neural Systems",
+    services: [
+      {
+        id: "svc-agents",
+        title: "Agent-to-Agent Autonomous Swarms",
+        tag: "AGENTIC",
+        icon: Bot,
+      },
+      {
+        id: "svc-rag",
+        title: "Enterprise RAG & Vector Search",
+        tag: "RAG & LLM",
+        icon: Database,
+      },
+      {
+        id: "svc-models",
+        title: "Custom LLM & Neural Workflows",
+        tag: "NEURAL MESH",
+        icon: BrainCircuit,
+      },
+    ],
+  },
+  {
+    id: "pillar-platforms",
+    code: "CLUSTER 02",
+    badge: "ENGINEERING",
+    title: "Digital Platforms & Mobility",
+    services: [
+      {
+        id: "svc-web",
+        title: "Web Application Development",
+        tag: "FULL-STACK",
+        icon: Globe,
+      },
+      {
+        id: "svc-mobile",
+        title: "Mobile App Development",
+        tag: "iOS & ANDROID",
+        icon: Smartphone,
+      },
+      {
+        id: "svc-saas",
+        title: "Multi-Tenant SaaS Platforms",
+        tag: "CLOUD SAAS",
+        icon: Layers,
+      },
+    ],
+  },
+  {
+    id: "pillar-operations",
+    code: "CLUSTER 03",
+    badge: "ENTERPRISE",
+    title: "Enterprise Systems & Growth",
+    services: [
+      {
+        id: "svc-payroll",
+        title: "Payroll & Enterprise ERP Systems",
+        tag: "ERP SUITE",
+        icon: Building2,
+      },
+      {
+        id: "svc-automation",
+        title: "Intelligent Process Automation",
+        tag: "WORKFLOW",
+        icon: TrendingUp,
+      },
+      {
+        id: "svc-marketing",
+        title: "AI Digital Marketing & Growth",
+        tag: "PREDICTIVE",
+        icon: Megaphone,
+      },
+    ],
+  },
+];
+
+const ALL_SERVICE_IDS = TREE_DATA.flatMap((p) => p.services.map((s) => s.id));
+
 export default function Services() {
+  const [autoActiveId, setAutoActiveId] = useState<string>(ALL_SERVICE_IDS[0]);
+  const [userHoveredId, setUserHoveredId] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const [channels, setChannels] = useState<ChannelPath[]>([]);
+  const [svgDimensions, setSvgDimensions] = useState({ width: 0, height: 0 });
+
+  const activeId = userHoveredId ?? autoActiveId;
+
+  const treeLayoutRef = useRef<HTMLDivElement>(null);
+  const parentNodeRef = useRef<HTMLDivElement>(null);
+  const pillarRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const cardRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+
+  // Automatic one-by-one sequential flow
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAutoActiveId((prev) => {
+        const currIndex = ALL_SERVICE_IDS.indexOf(prev);
+        const nextIndex = (currIndex + 1) % ALL_SERVICE_IDS.length;
+        return ALL_SERVICE_IDS[nextIndex];
+      });
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const updateConnections = useCallback(() => {
+    if (!treeLayoutRef.current || !parentNodeRef.current) return;
+
+    const layoutRect = treeLayoutRef.current.getBoundingClientRect();
+    const parentRect = parentNodeRef.current.getBoundingClientRect();
+
+    if (layoutRect.width < 50 || layoutRect.height < 50) return;
+
+    const pLeft = parentRect.left - layoutRect.left;
+    const pWidth = parentRect.width;
+    const pStartY = parentRect.bottom - layoutRect.top;
+
+    // 3 distinct source points along the bottom edge only (22%, 50%, 78%)
+    const sourceRatios = [0.22, 0.5, 0.78];
+
+    const newChannels: ChannelPath[] = [];
+
+    TREE_DATA.forEach((pillar, pIdx) => {
+      const pEl = pillarRefs.current[pIdx];
+      if (!pEl) return;
+      const pRect = pEl.getBoundingClientRect();
+      const bTopX = pRect.left + pRect.width / 2 - layoutRect.left;
+      const bTopY = pRect.top - layoutRect.top;
+      const bBottomY = pRect.bottom - layoutRect.top;
+
+      // Source point on the bottom of the parent node
+      const pStartX = pLeft + pWidth * sourceRatios[pIdx];
+
+      // Midpoint Y for orthogonal right-angle step
+      const dy = Math.max(bTopY - pStartY, 30);
+      const midY = pStartY + dy * 0.48;
+
+      let pillarChannelPath = "";
+
+      if (pIdx === 0) {
+        // Left Cluster: Down from bottom port -> 90° horizontal left -> 90° down into cluster
+        pillarChannelPath = `M ${pStartX} ${pStartY} L ${pStartX} ${midY} L ${bTopX} ${midY} L ${bTopX} ${bTopY}`;
+      } else if (pIdx === 1) {
+        // Center Cluster: Direct straight vertical line down from center bottom port
+        pillarChannelPath = `M ${pStartX} ${pStartY} L ${bTopX} ${bTopY}`;
+      } else {
+        // Right Cluster: Down from bottom port -> 90° horizontal right -> 90° down into cluster
+        pillarChannelPath = `M ${pStartX} ${pStartY} L ${pStartX} ${midY} L ${bTopX} ${midY} L ${bTopX} ${bTopY}`;
+      }
+
+      newChannels.push({
+        id: `channel-root-${pillar.id}`,
+        path: pillarChannelPath,
+        activeId: pillar.id,
+      });
+
+      // Sequential straight vertical channels down through cards (No bends)
+      let prevBottomY = bBottomY;
+      let prevX = bTopX;
+
+      pillar.services.forEach((service) => {
+        const cardEl = cardRefs.current[service.id];
+        if (!cardEl) return;
+        const cRect = cardEl.getBoundingClientRect();
+        const cTopX = cRect.left + cRect.width / 2 - layoutRect.left;
+        const cTopY = cRect.top - layoutRect.top;
+        const cBottomY = cRect.bottom - layoutRect.top;
+
+        newChannels.push({
+          id: `channel-${pillar.id}-${service.id}`,
+          path: `M ${prevX} ${prevBottomY} L ${cTopX} ${cTopY}`,
+          activeId: service.id,
+        });
+
+        prevX = cTopX;
+        prevBottomY = cBottomY;
+      });
+    });
+
+    setChannels(newChannels);
+    setSvgDimensions({ width: layoutRect.width, height: layoutRect.height });
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    updateConnections();
+
+    const handleResize = () => updateConnections();
+    window.addEventListener("resize", handleResize);
+
+    let observer: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined" && treeLayoutRef.current) {
+      observer = new ResizeObserver(() => updateConnections());
+      observer.observe(treeLayoutRef.current);
+    }
+
+    const rafId = requestAnimationFrame(() => updateConnections());
+    const timeoutId = setTimeout(updateConnections, 100);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (observer) observer.disconnect();
+      cancelAnimationFrame(rafId);
+      clearTimeout(timeoutId);
+    };
+  }, [updateConnections]);
+
+  const activePillarIndex = TREE_DATA.findIndex(
+    (p) => p.id === activeId || p.services.some((s) => s.id === activeId)
+  );
+
   return (
-    <section className="services-section">
-      <Container>
-        <Text as="h2" className="services-title">
-          Dot Phoenix Services
-        </Text>
+    <section className="services-tree-section" id="services">
+      <div className="services-grid-backdrop" aria-hidden="true" />
 
-        <div className="services-grid">
-          <Card className="services-card">
-            <div className="services-row">
-              <Globe className="services-icon" />
-              <h3>Web Application Development</h3>
-            </div>
-            <p>
-              We design and develop scalable, secure, and high-performance web
-              applications tailored to modern business needs.
-            </p>
-          </Card>
+      <Container className="services-tree-container">
+        <div className="services-tree-layout" ref={treeLayoutRef}>
+          {/* Dynamic SVG Conduit Channels with Straight and L-Lines (From Bottom Only) */}
+          {mounted && svgDimensions.width > 0 && (
+            <svg
+              className="services-tree-svg"
+              width={svgDimensions.width}
+              height={svgDimensions.height}
+              viewBox={`0 0 ${svgDimensions.width} ${svgDimensions.height}`}
+              aria-hidden="true"
+            >
+              {channels.map((chan) => {
+                const isChannelActive =
+                  activeId === "parent" ||
+                  activeId === chan.activeId ||
+                  TREE_DATA.find((p) =>
+                    p.services.some((s) => s.id === activeId)
+                  )?.id === chan.activeId;
 
-          <Card className="services-card">
-            <div className="services-row">
-              <Smartphone className="services-icon" />
-              <h3>Mobile Application Development</h3>
-            </div>
-            <p>
-              Native and cross-platform mobile applications engineered for
-              usability, performance, security, and growth.
-            </p>
-          </Card>
+                return (
+                  <g key={chan.id} className="service-channel-group">
+                    <path
+                      d={chan.path}
+                      className={`service-channel-base ${isChannelActive ? "active" : ""}`}
+                    />
+                    <path
+                      d={chan.path}
+                      className={`service-channel-glow ${isChannelActive ? "active" : ""}`}
+                    />
+                  </g>
+                );
+              })}
+            </svg>
+          )}
 
-          <Card className="services-card">
-            <div className="services-row">
-              <Layers className="services-icon" />
-              <h3>SaaS Product Development</h3>
-            </div>
-            <p>
-              End-to-end SaaS product development from architecture to
-              deployment, optimized for scalability and reliability.
-            </p>
-          </Card>
+          {/* PARENT ROOT NODE WITH 3 DOCKING PORTS ON BOTTOM ONLY */}
+          <div className="services-parent-node-wrap">
+            <div
+              ref={parentNodeRef}
+              className={`services-parent-node ${activeId === "parent" ? "active" : ""}`}
+              onMouseEnter={() => setUserHoveredId("parent")}
+              onMouseLeave={() => setUserHoveredId(null)}
+            >
+           <div className="parent-node-main">
+                <div className="parent-node-icon-wrap">
+                  <Cpu className="parent-core-icon" />
+                </div>
+                <div className="parent-node-text-wrap">
+                  <h3 className="parent-node-title">Dot Phoenix Services</h3>
+                  <span className="parent-node-subtitle">
+                    Central Intelligence Core & Multi-Agent Architecture
+                  </span>
+                </div>
+              </div>
 
-          <Card className="services-card">
-            <div className="services-row">
-              <BrainCircuit className="services-icon" />
-              <h3>AI & Intelligent Automation</h3>
+              {/* 3 Docking Ports on Bottom Edge Only */}
+              <div className="parent-docking-ports" aria-hidden="true">
+                <span
+                  className={`parent-port-pin port-0 ${activePillarIndex === 0 ? "active" : ""}`}
+                />
+                <span
+                  className={`parent-port-pin port-1 ${activePillarIndex === 1 ? "active" : ""}`}
+                />
+                <span
+                  className={`parent-port-pin port-2 ${activePillarIndex === 2 ? "active" : ""}`}
+                />
+              </div>
             </div>
-            <p>
-              AI-powered systems that analyze data, automate workflows, and
-              enable intelligent, insight-driven decisions.
-            </p>
-          </Card>
+          </div>
 
-          <Card className="services-card">
-            <div className="services-row">
-              <Megaphone className="services-icon" />
-              <h3>Digital Marketing</h3>
-            </div>
-            <p>
-              Data-driven digital marketing strategies combined with automation
-              to increase visibility, engagement, and growth.
-            </p>
-          </Card>
+          {/* 3 EQUALLY SPACED PILLARS WITH STRAIGHT / L-LINE CHANNELS */}
+          <div className="services-pillars-row">
+            {TREE_DATA.map((pillar, pIdx) => {
+              const isPillarActive =
+                activeId === pillar.id ||
+                pillar.services.some((s) => s.id === activeId);
 
-          <Card className="services-card">
-            <div className="services-row">
-              <Building2 className="services-icon" />
-              <h3>Payroll & Enterprise Systems</h3>
-            </div>
-            <p>
-              Secure payroll and enterprise systems built for compliance,
-              operational efficiency, and long-term scalability.
-            </p>
-          </Card>
+              return (
+                <div key={pillar.id} className="services-pillar-column">
+                  {/* Pillar Gateway Card */}
+                  <div
+                    ref={(el) => {
+                      pillarRefs.current[pIdx] = el;
+                    }}
+                    className={`services-pillar-hub ${isPillarActive ? "active" : ""}`}
+                    onMouseEnter={() => setUserHoveredId(pillar.id)}
+                    onMouseLeave={() => setUserHoveredId(null)}
+                  >
+                    <div className="pillar-hub-top">
+                      <span className="pillar-hub-code">{pillar.code}</span>
+                      <span className="pillar-hub-badge">{pillar.badge}</span>
+                    </div>
+                    <h4 className="pillar-hub-title">{pillar.title}</h4>
+                  </div>
+
+                  {/* Service Cards Stack */}
+                  <div className="services-cards-stack">
+                    {pillar.services.map((service) => {
+                      const Icon = service.icon;
+                      const isCardActive = activeId === service.id;
+
+                      return (
+                        <div
+                          key={service.id}
+                          ref={(el) => {
+                            cardRefs.current[service.id] = el;
+                          }}
+                          className={`services-node-card ${isCardActive ? "active" : ""}`}
+                          onMouseEnter={() => setUserHoveredId(service.id)}
+                          onMouseLeave={() => setUserHoveredId(null)}
+                        >
+                          <div className="service-card-inner">
+                            <Icon className="service-icon-svg" />
+
+                            <div className="service-card-body">
+                              <span className="service-single-line-title">
+                                {service.title}
+                              </span>
+                            </div>
+
+                            <span className="service-card-micro-tag">
+                              {service.tag}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </Container>
     </section>

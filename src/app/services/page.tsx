@@ -173,8 +173,6 @@ Ensuring accurate, efficient, and timely payroll operations."
           visual={<PayrollVisual />}
         />
       </section>
-
-      <WhyChoose />
     </main>
   );
 }

@@ -110,8 +110,10 @@ export default function CompanyPage() {
 
           <div className="vmv-grid">
             <article className="vmv-card">
-              <Eye className="vmv-icon" />
-              <h3>Vision</h3>
+              <div className="vmv-header">
+                <Eye className="vmv-icon" />
+                <h3>Vision</h3>
+              </div>
               <p>
                 To be a globally trusted technology partner, enabling
                 organizations to build resilient digital systems that evolve
@@ -120,8 +122,10 @@ export default function CompanyPage() {
             </article>
 
             <article className="vmv-card">
-              <Target className="vmv-icon" />
-              <h3>Mission</h3>
+              <div className="vmv-header">
+                <Target className="vmv-icon" />
+                <h3>Mission</h3>
+              </div>
               <p>
                 To design and deliver secure, scalable, and thoughtfully
                 engineered platforms by combining technical excellence with deep
@@ -130,8 +134,10 @@ export default function CompanyPage() {
             </article>
 
             <article className="vmv-card">
-              <Compass className="vmv-icon" />
-              <h3>Values</h3>
+              <div className="vmv-header">
+                <Compass className="vmv-icon" />
+                <h3>Values</h3>
+              </div>
               <p>
                 We believe great engineering is built on excellence,
                 accountability, and transparency paired with deep respect for
@@ -246,7 +252,6 @@ export default function CompanyPage() {
         </div>
       </section>
       <div>
-        <WhyChoose></WhyChoose>
       </div>
     </main>
   );
@@ -255,8 +260,10 @@ export default function CompanyPage() {
 function Value({ icon: Icon, title, text }: ValueProps) {
   return (
     <div className="offer-card">
-      <Icon className="offer-icon" />
-      <h3>{title}</h3>
+      <div className="offer-header">
+        <Icon className="offer-icon" />
+        <h3>{title}</h3>
+      </div>
       <p>{text}</p>
     </div>
   );
@@ -279,8 +286,10 @@ function Review({ quote, author, industry }: ReviewProps) {
 function Benefit({ icon: Icon, title, text }: BenefitProps) {
   return (
     <div className="benefit-card">
-      <Icon className="benefit-icon" />
-      <h4>{title}</h4>
+      <div className="benefit-header">
+        <Icon className="benefit-icon" />
+        <h4>{title}</h4>
+      </div>
       <p>{text}</p>
     </div>
   );

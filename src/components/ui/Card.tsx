@@ -1,10 +1,19 @@
-import React from "react";
+import React, { forwardRef } from "react";
 
-type CardProps = {
+export type CardProps = React.HTMLAttributes<HTMLDivElement> & {
   children: React.ReactNode;
   className?: string;
 };
 
-export default function Card({ children, className }: CardProps) {
-  return <div className={`ui-card ${className ?? ""}`}>{children}</div>;
-}
+const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
+  { children, className, ...props },
+  ref
+) {
+  return (
+    <div ref={ref} className={`ui-card ${className ?? ""}`} {...props}>
+      {children}
+    </div>
+  );
+});
+
+export default Card;

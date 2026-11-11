@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import "./solutions.css";
 import WhyChoose from "@/components/WhyChoose";
 
@@ -143,103 +143,252 @@ const sections: Section[] = [
 ];
 
 export default function SolutionsClient() {
-  const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [progress, setProgress] = useState(0);
+  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const cardContentRefs = useRef<(HTMLElement | null)[]>([]);
+  const wrapperRef = useRef<HTMLElement | null>(null);
+  const railContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const railBallRef = useRef<HTMLDivElement | null>(null);
+  const railFillRef = useRef<HTMLDivElement | null>(null);
+
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // Position of rail container aligned with card tops
+  const [railTop, setRailTop] = useState<number>(0);
+  const [railHeight, setRailHeight] = useState<number>(0);
+  const railHeightRef = useRef<number>(0);
+
+  // Smooth lerp physics state
+  const targetProgressRef = useRef<number>(0);
+  const currentProgressRef = useRef<number>(0);
+
+  // Calculate pixel-perfect alignment of the rail line spanning from top of Card 0 to top of Card 7
+  const updateRailAlignment = useCallback(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const firstCard = cardContentRefs.current[0];
+    const lastCard = cardContentRefs.current[sections.length - 1];
+
+    if (!firstCard || !lastCard) return;
+
+    const firstCardRect = firstCard.getBoundingClientRect();
+    const lastCardRect = lastCard.getBoundingClientRect();
+
+    const topOffset = firstCardRect.top - wrapperRect.top;
+    const bottomOffset = lastCardRect.top - wrapperRect.top;
+    const height = Math.max(0, bottomOffset - topOffset);
+
+    setRailTop(topOffset);
+    setRailHeight(height);
+    railHeightRef.current = height;
+  }, []);
+
   useEffect(() => {
+    updateRailAlignment();
+    window.addEventListener("resize", updateRailAlignment);
+    return () => window.removeEventListener("resize", updateRailAlignment);
+  }, [updateRailAlignment]);
+
+  // Ultra-smooth GPU-accelerated LERP RAF loop for rail ball and fill
+  useEffect(() => {
+    let rafId: number | null = null;
+
     const onScroll = () => {
-      const doc = document.documentElement;
-      const total = doc.scrollHeight - window.innerHeight;
-      setProgress(total > 0 ? window.scrollY / total : 0);
+      const wrapper = wrapperRef.current;
+      if (!wrapper) return;
+
+      const rect = wrapper.getBoundingClientRect();
+      const scrollableDistance = (sections.length - 1) * window.innerHeight;
+      if (scrollableDistance <= 0) return;
+
+      const scrolled = -rect.top;
+      const p = Math.min(Math.max(scrolled / scrollableDistance, 0), 1);
+      targetProgressRef.current = p;
+    };
+
+    const tick = () => {
+      // 60/120fps fluid damped interpolation
+      const diff = targetProgressRef.current - currentProgressRef.current;
+      currentProgressRef.current += diff * 0.14;
+
+      const p = Math.min(Math.max(currentProgressRef.current, 0), 1);
+      const h = railHeightRef.current;
+
+      if (railBallRef.current && h > 0) {
+        railBallRef.current.style.transform = `translate3d(-50%, ${p * h}px, 0)`;
+      }
+      if (railFillRef.current) {
+        railFillRef.current.style.transform = `scaleY(${p})`;
+      }
+
+      rafId = requestAnimationFrame(tick);
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
+    currentProgressRef.current = targetProgressRef.current;
+    rafId = requestAnimationFrame(tick);
 
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
+  // Focus the card centered in the viewport
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const idx = Number((entry.target as HTMLElement).dataset.index);
-            setActiveIndex(idx);
+            if (!isNaN(idx)) {
+              setActiveIndex(idx);
+            }
           }
         });
       },
-      { threshold: 0.35, rootMargin: "0px 0px -30% 0px" },
+      {
+        threshold: 0.45,
+      }
     );
 
-    sectionRefs.current.forEach((el) => el && observer.observe(el));
+    slideRefs.current.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
     return () => observer.disconnect();
   }, []);
 
+  // Smooth scroll to center a card
+  const scrollToCard = (index: number) => {
+    const slide = slideRefs.current[index];
+    if (!slide) return;
+
+    const slideTop = slide.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({
+      top: slideTop,
+      behavior: "smooth",
+    });
+  };
+
+  // Click on rail line to jump smoothly to that scroll position
+  const handleRailClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rail = railContainerRef.current;
+    if (!rail) return;
+
+    const rect = rail.getBoundingClientRect();
+    const clickY = e.clientY - rect.top;
+    const ratio = Math.min(Math.max(clickY / rect.height, 0), 1);
+
+    const targetIndex = Math.min(
+      Math.round(ratio * (sections.length - 1)),
+      sections.length - 1
+    );
+    scrollToCard(targetIndex);
+  };
+
   return (
     <main className="solutionspage">
+      {/* Intro Header */}
       <header className="solutionspage-header">
-        <h1 className="fade-in-left">Dot Phoenix Solutions</h1>
-        <p
-          className="solutionspage-intro fade-in-right"
-          style={{ animationDelay: "0.12s" }}
-        >
+        <span className="solutionspage-badge">Enterprise Solutions</span>
+        <h1 className="solutionspage-title">Dot Phoenix Solutions</h1>
+        <p className="solutionspage-intro">
           We design and deliver secure, scalable digital platforms that help
           organizations operate efficiently, grow confidently, and adapt without
           friction.
         </p>
       </header>
 
-      <section className="solutionspage-wrapper">
+      {/* Solutions Section with Traveling Rail & Centered Same-Size Cards */}
+      <section className="solutionspage-wrapper" ref={wrapperRef}>
         <div className="solutionspage-layout">
+          {/* Silky Smooth Rail Container */}
           <aside className="solutionspage-rail">
-            <div className="rail-line" />
             <div
-              className="rail-indicator"
-              style={{ transform: `translateY(${progress * 60}vh)` }}
-            />
+              className="rail-container"
+              ref={railContainerRef}
+              onClick={handleRailClick}
+              style={{
+                top: railTop > 0 ? `${railTop}px` : "calc(50vh - 18.5rem)",
+                height:
+                  railHeight > 0
+                    ? `${railHeight}px`
+                    : `calc(${(sections.length - 1) * 100}vh)`,
+              }}
+              role="slider"
+              aria-label="Solutions scroll rail"
+            >
+              <div className="rail-line" />
+              <div className="rail-fill" ref={railFillRef} />
+
+              {/* Smooth Liquid Traveling Scroll Ball */}
+              <div className="rail-ball" ref={railBallRef} />
+            </div>
           </aside>
 
-          <section className="solutions-wrapper">
-            {sections.map((item, index) => (
-              <div
-                key={index}
-                ref={(el) => {
-                  sectionRefs.current[index] = el;
-                }}
-                data-index={index}
-                className={`solution-slide ${
-                  activeIndex === index ? "active" : ""
-                }`}
-              >
-                <div className="solution-content">
-                  <span className="solution-tag">{item.title}</span>
-                  <h2 className="solution-headline">{item.headline}</h2>
-                  <p className="solution-description">{item.description}</p>
-
-                  <ul className="solution-points">
-                    {item.valuePoints.map((point, i) => (
-                      <li key={i}>{point}</li>
-                    ))}
-                  </ul>
-
-                  <button
-                    className="solutionspage-button"
-                    onClick={() =>
-                      window.dispatchEvent(new Event("open-sidebar"))
-                    }
+          {/* Vertical Stack: Each card has the SAME SIZE and points in SERIES */}
+          <div className="solutions-cards-wrapper">
+            {sections.map((item, index) => {
+              const isActive = activeIndex === index;
+              return (
+                <div
+                  key={index}
+                  ref={(el) => {
+                    slideRefs.current[index] = el;
+                  }}
+                  data-index={index}
+                  className={`solution-slide ${isActive ? "active" : ""}`}
+                >
+                  <article
+                    className="solution-content"
+                    ref={(el) => {
+                      cardContentRefs.current[index] = el;
+                    }}
                   >
-                    Request a Demo →
-                  </button>
+                    <div className="solution-card-header">
+                      <span className="solution-tag">{item.title}</span>
+                      <h2 className="solution-headline">{item.headline}</h2>
+                      <p className="solution-description">{item.description}</p>
+                      <div className="solution-divider" />
+                    </div>
+
+                    <div className="solution-card-body">
+                      {/* All points in SERIES (vertical list) */}
+                      <ul className="solution-points">
+                        {item.valuePoints.map((point, i) => (
+                          <li key={i}>{point}</li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="solution-card-footer">
+                      {item.emphasisLine && (
+                        <blockquote className="solution-emphasis">
+                          “{item.emphasisLine}”
+                        </blockquote>
+                      )}
+
+                      <button
+                        type="button"
+                        className="solutionspage-button"
+                        onClick={() =>
+                          window.dispatchEvent(new Event("open-sidebar"))
+                        }
+                      >
+                        Request a Demo →
+                      </button>
+                    </div>
+                  </article>
                 </div>
-              </div>
-            ))}
-          </section>
+              );
+            })}
+          </div>
         </div>
       </section>
-
-      <WhyChoose />
     </main>
   );
 }
