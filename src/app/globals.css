@@ -3,7 +3,11 @@
   --space-2: clamp(1rem, 0.9rem + 0.35vw, 1.25rem);
   --space-3: clamp(1.5rem, 1.35rem + 0.55vw, 2rem);
   --space-4: clamp(2rem, 1.75rem + 0.85vw, 2.75rem);
-  --space-5: clamp(3rem, 2.6rem + 1.2vw, 4rem);
+  --space-5: clamp(2.75rem, 2.5rem + 1vw, 3.5rem);
+
+  /* Unified Section Spacing Token */
+  --section-py: clamp(2.5rem, 3.75vw, 3.75rem);
+  --section-gap-title: clamp(1.75rem, 2.5vw, 2.75rem);
 
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
@@ -16,9 +20,9 @@
   --border: #1f2228;
   --border-subtle: rgba(255, 255, 255, 0.08);
 
-  --text: #e9ebef;
-  --muted: #c3c8d1;
-  --accent: #ff8c28;
+  --text: #ffffff;
+  --muted: #9aa0a6;
+  --accent: #ffffff;
 
   --header-h: clamp(3.75rem, 4.5vw, 4.5rem);
   --content-max: 94rem;
@@ -91,7 +95,7 @@ main {
 }
 
 section {
-  padding-block: var(--space-4);
+  padding-block: var(--section-py);
   width: 100%;
   position: relative;
 }

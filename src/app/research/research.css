@@ -4,7 +4,7 @@
   --border: #1f2228;
   --text: #ffffff;
   --muted: #9aa0a6;
-  --navi-accent: #4f9cff;
+  --navi-accent: #ffffff;
 }
 
 .research-page {
@@ -50,10 +50,10 @@
 }
 
 .research-sections {
-  padding: clamp(3rem, 5vw, 6rem) clamp(1.25rem, 3.5vw, 3.5rem);
+  padding: clamp(2.5rem, 4vw, 4rem) clamp(1.25rem, 3.5vw, 3.5rem);
   display: flex;
   flex-direction: column;
-  gap: clamp(4rem, 6vw, 7.5rem);
+  gap: clamp(2.5rem, 4vw, 4.5rem);
   width: 100%;
 }
 

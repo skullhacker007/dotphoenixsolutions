@@ -26,11 +26,8 @@
 
 .msg.ai {
   align-self: flex-start;
-  background: linear-gradient(
-    135deg,
-    rgba(99, 102, 241, 0.35),
-    rgba(139, 92, 246, 0.35)
-  );
+  background: rgba(255, 255, 255, 0.05);
+  border: 0.0625rem solid rgba(255, 255, 255, 0.08);
 }
 
 .navi-input {
@@ -93,7 +90,7 @@
 }
 
 .agents-status {
-  color: #22c55e;
+  color: #ffffff;
   font-weight: 600;
 }
 
@@ -135,11 +132,11 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #4ade80;
+  color: #9aa0a6;
 }
 
 .step-state.final {
-  color: #22c55e;
+  color: #ffffff;
 }
 
 .step-content {
@@ -156,16 +153,12 @@
 }
 
 .step-value {
-  color: #e5e7eb;
+  color: #ffffff;
 }
 
 .agent-step.done {
-  border-color: rgba(34, 197, 94, 0.5);
-  background: linear-gradient(
-    135deg,
-    rgba(34, 197, 94, 0.18),
-    rgba(34, 197, 94, 0.08)
-  );
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .agents-body::-webkit-scrollbar {
@@ -193,7 +186,7 @@
 }
 
 .ai-os-status {
-  color: #22c55e;
+  color: #ffffff;
 }
 
 .ai-os-line {
@@ -201,13 +194,13 @@
 }
 
 .ai-os-prompt {
-  color: #38bdf8;
+  color: #ffffff;
 }
 
 .cursor {
   width: 0.5rem;
   height: 0.9rem;
-  background: #38bdf8;
+  background: #ffffff;
   display: inline-block;
   animation: blink 1s infinite;
 }

@@ -74,7 +74,7 @@
   margin: 0.875rem 0 0.375rem;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: #cfd3da;
+  color: #9aa0a6;
 }
 
 .sidebar-form input,
@@ -92,14 +92,14 @@
 
 .sidebar-form input::placeholder,
 .sidebar-form textarea::placeholder {
-  color: #7d828a;
+  color: #9aa0a6;
 }
 
 .sidebar-form input:focus,
 .sidebar-form select:focus,
 .sidebar-form textarea:focus {
   outline: none;
-  border-color: #4f46e5;
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 select {
@@ -152,13 +152,13 @@ select {
 .clear-btn {
   background: transparent;
   border: 0.0625rem solid #2a2e36;
-  color: #cbd5e1;
+  color: #9aa0a6;
   padding: 0.75rem;
   letter-spacing: 0.1rem;
 }
 
 .clear-btn:hover {
-  border-color: #4b5563;
+  border-color: rgba(255, 255, 255, 0.3);
   color: #ffffff;
 }
 

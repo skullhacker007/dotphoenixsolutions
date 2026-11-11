@@ -1,13 +1,13 @@
 .services-wrapper {
   width: 100%;
-  color: #cbd5f5;
+  color: #9aa0a6;
   padding-top: var(--header-h);
 }
 
 .services-header {
   max-width: 68rem;
-  margin: 0 auto clamp(3rem, 5vw, 5rem);
-  padding: 0 clamp(1.25rem, 3.5vw, 3.5rem);
+  margin: 0 auto clamp(2rem, 3.5vw, 3rem);
+  padding: clamp(2rem, 3.5vw, 3rem) clamp(1.25rem, 3.5vw, 3.5rem) 0;
   text-align: center;
 }
 
@@ -21,7 +21,7 @@
 .services-header p {
   font-size: clamp(0.975rem, 0.94rem + 0.18vw, 1.075rem);
   line-height: 1.75;
-  color: #94a3b8;
+  color: #9aa0a6;
 }
 
 .services-list {
@@ -30,10 +30,9 @@
 }
 
 .service-section {
-  min-height: 100vh;
   display: flex;
   align-items: center;
-  padding: clamp(3rem, 5vw, 5rem) 0;
+  padding: clamp(2.5rem, 3.75vw, 3.75rem) 0;
 }
 
 .service-inner {
@@ -61,7 +60,7 @@
 .service-intro {
   font-size: clamp(0.95rem, 0.92rem + 0.15vw, 1.05rem);
   line-height: 1.75;
-  color: #e2e8f0;
+  color: #ffffff;
   max-width: 48rem;
   margin-bottom: 1.2rem;
 }
@@ -69,7 +68,7 @@
 .service-description {
   font-size: clamp(0.875rem, 0.85rem + 0.12vw, 0.9375rem);
   line-height: 1.7;
-  color: #94a3b8;
+  color: #9aa0a6;
   max-width: 48rem;
   margin-bottom: 2.2rem;
 }
@@ -79,7 +78,7 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 1rem;
-   /* color: #ff8c28; */
+  color: #9aa0a6;
 }
 
 .service-list {
@@ -88,7 +87,7 @@
 
 .service-list li {
   font-size: 0.875rem;
-  /* color: #cbd5f5; */
+  color: #9aa0a6;
   margin-bottom: 0.65rem;
   line-height: 1.65;
 }
@@ -102,13 +101,12 @@
 
 @media (max-width: 56.25rem) {
   .service-section {
-    min-height: auto;
-    padding: 3rem 0;
+    padding: clamp(2rem, 3.5vw, 2.75rem) 0;
   }
 
   .service-split {
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 2.5rem;
   }
 
   .service-content {

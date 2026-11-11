@@ -1,10 +1,10 @@
 :root {
   --bg-dark: #0e0f12;
   --text-primary: #ffffff;
-  --text-secondary: #cbd5f5;
-  --text-muted: #94a3b8;
+  --text-secondary: #9aa0a6;
+  --text-muted: #9aa0a6;
   --border-soft: #1e293b;
-  --accent: #ff8c28;
+  --accent: #ffffff;
   --card-bg: rgba(255, 255, 255, 0.02);
 }
 
@@ -23,7 +23,7 @@
 }
 
 .careers-header {
-  margin-bottom: 3rem;
+  margin-bottom: clamp(1.75rem, 2.5vw, 2.5rem);
   max-width: 65rem;
 }
 
@@ -49,7 +49,7 @@
 .careers-list {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: clamp(1.5rem, 2vw, 2rem);
 }
 
 .career-role {
@@ -59,11 +59,13 @@
   border: 0.0625rem solid var(--border-soft);
   transition:
     transform 0.35s ease,
+    border-color 0.25s ease,
     box-shadow 0.35s ease;
 }
 
 .career-role:hover {
   transform: translateY(-0.375rem);
+  border-color: rgba(255, 255, 255, 0.25);
   box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.4);
 }
 
@@ -82,7 +84,7 @@
   bottom: -0.45rem;
   width: 2.5rem;
   height: 0.125rem;
-  background: linear-gradient(90deg, var(--accent), transparent);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.5), transparent);
 }
 
 .role-desc {
@@ -90,19 +92,21 @@
   line-height: 1.7;
   font-size: 0.9375rem;
   max-width: 64rem;
+  color: #9aa0a6;
 }
 
 .career-role h3 {
   margin-top: 1.3rem;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #e5e7eb;
+  color: #ffffff;
 }
 
 .career-role ul {
   margin-top: 0.5rem;
   padding-left: 1.1rem;
   font-size: 0.875rem;
+  color: #9aa0a6;
 }
 
 .career-role li {
@@ -150,14 +154,11 @@
 }
 
 .careers-cta {
-  margin-top: 4rem;
+  margin-top: clamp(2rem, 3vw, 3rem);
   padding: 2.5rem;
   border-radius: 1.125rem;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 140, 40, 0.12),
-    rgba(15, 23, 42, 0.6)
-  );
+  background: rgba(255, 255, 255, 0.025);
+  border: 0.0625rem solid var(--border-soft);
 }
 
 .careers-cols {
@@ -186,7 +187,7 @@
 }
 
 .cta-inline a {
-  color: var(--accent);
+  color: #ffffff;
   font-weight: 500;
   text-decoration: underline;
 }

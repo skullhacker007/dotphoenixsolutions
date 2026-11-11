@@ -1,12 +1,12 @@
 .services-section {
-  padding-block: var(--space-5);
+  padding-block: var(--section-py);
   width: 100%;
 }
 
 .services-title {
   font-size: clamp(1.625rem, 1.35rem + 1vw, 2.35rem);
   font-weight: 600;
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--section-gap-title);
   color: #ffffff;
   letter-spacing: -0.025em;
 }
@@ -47,7 +47,7 @@
   flex-shrink: 0;
   align-self: flex-start;
   margin-top: 0.125rem;
- /* color: #ff8c28; */
+  color: #ffffff;
 }
 
 .services-card h3 {
@@ -71,10 +71,10 @@
 @media (hover: hover) {
   .services-card:hover {
     transform: translateY(-0.25rem);
-    border-color: rgba(255, 140, 40, 0.35);
+    border-color: rgba(255, 255, 255, 0.25);
     box-shadow:
       0 0.875rem 2.25rem rgba(0, 0, 0, 0.55),
-      0 0 0 0.0625rem rgba(255, 140, 40, 0.15),
+      0 0 0 0.0625rem rgba(255, 255, 255, 0.08),
       inset 0 0.0625rem 0 rgba(255, 255, 255, 0.04);
   }
 }

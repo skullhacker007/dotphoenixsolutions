@@ -117,21 +117,21 @@ export default function Process() {
                         <Line
                           type="monotone"
                           dataKey="revenue"
-                          stroke="#6d9cff"
+                          stroke="#ffffff"
                           strokeWidth={2.5}
                           dot={false}
                         />
                         <Line
                           type="monotone"
                           dataKey="orders"
-                          stroke="rgba(120,160,255,0.6)"
+                          stroke="#9aa0a6"
                           strokeWidth={2}
                           dot={false}
                         />
                         <Line
                           type="monotone"
                           dataKey="growth"
-                          stroke="hsla(0, 0%, 100%, 0.35)"
+                          stroke="rgba(255, 255, 255, 0.35)"
                           strokeWidth={1.5}
                           dot={false}
                         />

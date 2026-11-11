@@ -1,10 +1,10 @@
 :root {
-  --policy-text: #e6eef8;
-  --policy-muted: #94a3b8;
+  --policy-text: #9aa0a6;
+  --policy-muted: #9aa0a6;
   --policy-heading: #ffffff;
-  --policy-body: #c7d6ea;
-  --policy-link: #9fbce8;
-  --policy-bg-focus: #0b1220;
+  --policy-body: #9aa0a6;
+  --policy-link: #ffffff;
+  --policy-bg-focus: #12141a;
 }
 
 .policy-wrapper,

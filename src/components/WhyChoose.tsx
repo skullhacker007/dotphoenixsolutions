@@ -91,7 +91,7 @@ export default function WhyChoose() {
                 detectRetina: true,
                 particles: {
                   number: { value: 40 },
-                  color: { value: "#ff8c28" },
+                  color: { value: "#ffffff" },
                   opacity: { value: 0.25 },
                   size: { value: 2 },
                   move: { enable: true, speed: 0.2 },

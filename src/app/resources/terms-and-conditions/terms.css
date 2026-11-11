@@ -1,9 +1,9 @@
 :root {
-  --terms-text: #e6eef8;
-  --terms-muted: #94a3b8;
-  --terms-body: #c7d6ea;
+  --terms-text: #9aa0a6;
+  --terms-muted: #9aa0a6;
+  --terms-body: #9aa0a6;
   --terms-heading: #ffffff;
-  --terms-link: #9fbce8;
+  --terms-link: #ffffff;
 }
 
 .terms-wrapper {
